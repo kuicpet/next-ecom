@@ -1,30 +1,44 @@
-import { AppBar, Container, Toolbar, Typography } from '@material-ui/core'
-import Head from 'next/head'
-import React from 'react'
-import useStyles from '../utils/styles'
+import {
+  AppBar,
+  Container,
+  Link,
+  Toolbar,
+  Typography,
+} from '@material-ui/core';
+import Head from 'next/head';
+import React from 'react';
+import NextLink from 'next/link';
+import useStyles from '../utils/styles';
 
 const Layout = ({ children }) => {
-    const classes = useStyles()
-    return (
-        <div>
-            <Head>
-                <title>
-                    Next-Ecom
-                </title>
-            </Head>
-            <AppBar position='static' className={classes.navbar}>
-                <Toolbar>
-                    <Typography>Next-Ecom</Typography>
-                </Toolbar>
-            </AppBar>
-            <Container className={classes.main}>
-                {children}
-            </Container>
-            <footer className={classes.footer}>
-                All rights reserved Next-Ecom
-            </footer>
-        </div>
-    )
-}
+  const classes = useStyles();
+  return (
+    <div>
+      <Head>
+        <title>Next-Ecom</title>
+      </Head>
+      <AppBar position="static" className={classes.navbar}>
+        <Toolbar>
+          <NextLink href="/">
+            <Link>
+              <Typography className={classes.brand}>Next-Ecom</Typography>
+            </Link>
+          </NextLink>
+          <div className={classes.grow}></div>
+          <div>
+            <NextLink href="/cart" passHref>
+              <Link>Cart</Link>
+            </NextLink>
+            <NextLink href="/login" passHref>
+              <Link>Login</Link>
+            </NextLink>
+          </div>
+        </Toolbar>
+      </AppBar>
+      <Container className={classes.main}>{children}</Container>
+      <footer className={classes.footer}>All rights reserved Next-Ecom</footer>
+    </div>
+  );
+};
 
-export default Layout
+export default Layout;
