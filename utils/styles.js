@@ -23,6 +23,9 @@ const useStyles = makeStyles({
     marginBottom: 10,
     textAlign: 'center',
   },
+  button: {
+    color: '#fff'
+  },
   section: {
     marginTop: 10,
     marginBottom: 10,

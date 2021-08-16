@@ -94,6 +94,7 @@ const ProductPage = () => {
                   fullWidth
                   variant="contained"
                   color="primary"
+                  className={classes.button}
                 >
                   Add to Cart
                 </Button>
