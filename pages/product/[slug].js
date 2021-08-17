@@ -1,5 +1,5 @@
 //import { useRouter } from 'next/router';
-import React from 'react';
+import React, { useContext } from 'react';
 import NextLink from 'next/link';
 import Image from 'next/image';
 import {
@@ -16,8 +16,11 @@ import Layout from '../../components/Layout';
 import useStyles from '../../utils/styles';
 import db from '../../utils/db';
 import Product from '../../models/Products';
+import axios from 'axios';
+import { Store } from '../../utils/Store';
 
 const ProductPage = (props) => {
+  const { dispatch } = useContext(Store);
   const { product } = props;
   const classes = useStyles();
   // const router = useRouter();
@@ -27,9 +30,14 @@ const ProductPage = (props) => {
     return <div>Product not Found</div>;
   }
 
-  const addToCartHandler = () => {
-    
-  }
+  const addToCartHandler = async () => {
+    const { data } = await axios.get(`/api/products/${product._id}`);
+    if (data.countInStock <= 0) {
+      window.alert('Sorry, Product out of Stock');
+      return;
+    }
+    dispatch({ type: 'CART_ADD_ITEM', payload: { ...product, qty: 1 } });
+  };
 
   return (
     <Layout title={product.name} description={product.description}>
@@ -124,7 +132,7 @@ export async function getServerSideProps(context) {
   db.disconnect();
   return {
     props: {
-      product: db.convertDocToObj(product)
+      product: db.convertDocToObj(product),
     },
   };
 }
