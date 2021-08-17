@@ -23,8 +23,10 @@ import Layout from '../components/Layout';
 import { Store } from '../utils/Store';
 import useStyles from '../utils/styles';
 import axios from 'axios';
+import { useRouter } from 'next/router';
 
 const CartPage = () => {
+  const router = useRouter()
   const { state, dispatch } = useContext(Store);
   const {
     cart: { cartItems },
@@ -43,6 +45,10 @@ const CartPage = () => {
   const removeItemHandler = (item) => [
     dispatch({ type: 'CART_REMOVE_ITEM', payload: item }),
   ];
+
+  const checkOutHandler = () => {
+    router.push('/shipping')
+  };
 
   return (
     <Layout title="Shopping cart">
@@ -139,6 +145,7 @@ const CartPage = () => {
                     color="primary"
                     fullWidth
                     className={classes.button}
+                    onClick={checkOutHandler}
                   >
                     Check Out
                   </Button>
