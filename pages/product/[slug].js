@@ -20,7 +20,7 @@ import axios from 'axios';
 import { Store } from '../../utils/Store';
 
 const ProductPage = (props) => {
-  const { dispatch } = useContext(Store);
+  const { state, dispatch } = useContext(Store);
   const { product } = props;
   const classes = useStyles();
   const router = useRouter();
@@ -30,14 +30,16 @@ const ProductPage = (props) => {
     return <div>Product not Found</div>;
   }
 
-  const addToCartHandler = async () => {
+  const addToCartHandler = async (product) => {
+    const existItem = state.cart.cartItems.find((x) => x._id === product._id);
+    const qty = existItem ? existItem.qty + 1 : 1;
     const { data } = await axios.get(`/api/products/${product._id}`);
-    if (data.countInStock <= 0) {
+    if (data.countInStock < qty) {
       window.alert('Sorry, Product out of Stock');
       return;
     }
-    dispatch({ type: 'CART_ADD_ITEM', payload: { ...product, qty: 1 } });
-    router.push('/cart')
+    dispatch({ type: 'CART_ADD_ITEM', payload: { ...product, qty } });
+    router.push('/cart');
   };
 
   return (
@@ -112,7 +114,7 @@ const ProductPage = (props) => {
                   variant="contained"
                   color="primary"
                   className={classes.button}
-                  onClick={addToCartHandler}
+                  onClick={() => addToCartHandler(product)}
                 >
                   Add to Cart
                 </Button>
