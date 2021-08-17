@@ -1,4 +1,4 @@
-import { useRouter } from 'next/router';
+//import { useRouter } from 'next/router';
 import React from 'react';
 import NextLink from 'next/link';
 import Image from 'next/image';
@@ -12,17 +12,25 @@ import {
   Button,
 } from '@material-ui/core';
 import Layout from '../../components/Layout';
-import data from '../../utils/data';
+//import data from '../../utils/data';
 import useStyles from '../../utils/styles';
+import db from '../../utils/db';
+import Product from '../../models/Products';
 
-const ProductPage = () => {
+const ProductPage = (props) => {
+  const { product } = props;
   const classes = useStyles();
-  const router = useRouter();
-  const { slug } = router.query;
-  const product = data.products.find((a) => a.slug === slug);
+  // const router = useRouter();
+  // const { slug } = router.query;
+  // const product = data.products.find((a) => a.slug === slug);
   if (!product) {
     return <div>Product not Found</div>;
   }
+
+  const addToCartHandler = () => {
+    
+  }
+
   return (
     <Layout title={product.name} description={product.description}>
       <div className={classes.section}>
@@ -45,7 +53,7 @@ const ProductPage = () => {
         <Grid item md={3} xs={12}>
           <List>
             <ListItem>
-              <Typography component='h1'>{product.name}</Typography>
+              <Typography component="h1">{product.name}</Typography>
             </ListItem>
             <ListItem>
               <Typography>Category: {product.category}</Typography>
@@ -95,6 +103,7 @@ const ProductPage = () => {
                   variant="contained"
                   color="primary"
                   className={classes.button}
+                  onClick={addToCartHandler}
                 >
                   Add to Cart
                 </Button>
@@ -106,5 +115,18 @@ const ProductPage = () => {
     </Layout>
   );
 };
+
+export async function getServerSideProps(context) {
+  const { params } = context;
+  const { slug } = params;
+  db.connect();
+  const product = await Product.findOne({ slug }).lean();
+  db.disconnect();
+  return {
+    props: {
+      product: db.convertDocToObj(product)
+    },
+  };
+}
 
 export default ProductPage;
