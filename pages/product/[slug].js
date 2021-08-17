@@ -1,4 +1,4 @@
-//import { useRouter } from 'next/router';
+import { useRouter } from 'next/router';
 import React, { useContext } from 'react';
 import NextLink from 'next/link';
 import Image from 'next/image';
@@ -23,7 +23,7 @@ const ProductPage = (props) => {
   const { dispatch } = useContext(Store);
   const { product } = props;
   const classes = useStyles();
-  // const router = useRouter();
+  const router = useRouter();
   // const { slug } = router.query;
   // const product = data.products.find((a) => a.slug === slug);
   if (!product) {
@@ -37,6 +37,7 @@ const ProductPage = (props) => {
       return;
     }
     dispatch({ type: 'CART_ADD_ITEM', payload: { ...product, qty: 1 } });
+    router.push('/cart')
   };
 
   return (
