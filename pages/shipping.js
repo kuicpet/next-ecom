@@ -6,7 +6,7 @@ const Shipping = () => {
   const router = useRouter();
   const { state, dispatch } = useContext(Store);
   const { userInfo } = state;
-  if (userInfo) {
+  if (!userInfo) {
     router.push('/login?redirect=/shipping');
   }
   return <div>Shipping</div>;
