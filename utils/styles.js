@@ -24,16 +24,20 @@ const useStyles = makeStyles({
     textAlign: 'center',
   },
   button: {
-    color: '#fff'
+    color: '#fff',
   },
   section: {
     marginTop: 10,
     marginBottom: 10,
   },
-  form : {
+  form: {
     maxWidth: 600,
     margin: '0 auto',
-  }
+  },
+  navbarBtn: {
+    color: '#fff',
+    textTransform: 'initial',
+  },
 });
 
 export default useStyles;

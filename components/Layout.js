@@ -9,6 +9,7 @@ import {
   CssBaseline,
   Switch,
   Badge,
+  Button,
 } from '@material-ui/core';
 import Head from 'next/head';
 import React, { useContext } from 'react';
@@ -19,7 +20,7 @@ import Cookies from 'js-cookie';
 
 const Layout = ({ title, description, children }) => {
   const { state, dispatch } = useContext(Store);
-  const { darkMode, cart } = state;
+  const { darkMode, cart, userInfo } = state;
   const theme = createTheme({
     typography: {
       h1: {
@@ -84,9 +85,13 @@ const Layout = ({ title, description, children }) => {
                   )}
                 </Link>
               </NextLink>
-              <NextLink href="/login" passHref>
-                <Link>Login</Link>
-              </NextLink>
+              {userInfo ? (
+                <Button className={classes.navbarBth}>{userInfo.name}</Button>
+              ) : (
+                <NextLink href="/login" passHref>
+                  <Link>Login</Link>
+                </NextLink>
+              )}
             </div>
           </Toolbar>
         </AppBar>
