@@ -13,6 +13,7 @@
     "axios": "^0.21.1",
     "bcryptjs": "^2.4.3",
     "js-cookie": "^3.0.0",
+    "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.13.7",
     "next": "11.1.0",
     "next-connect": "^0.10.2",

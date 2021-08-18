@@ -6,16 +6,28 @@ import {
   Typography,
   Link,
 } from '@material-ui/core';
-import React from 'react';
+import React, { useState } from 'react';
 import NextLink from 'next/link';
 import Layout from '../components/Layout';
 import useStyles from '../utils/styles';
+import axios from 'axios';
 
 const Login = () => {
+  const [email, setEmail] = useState('')
+  const [password, setpassword] = useState('')
   const classes = useStyles();
+  const submitHandler = async (e) => {
+    e.preventDefault();
+    try {
+      const { data } = await axios.post('/api/users/login', { email, password });
+      alert('success login')
+    } catch (error) {
+      alert(error.response.data ? error.response.data.message : error.message)
+    }
+  };
   return (
     <Layout title="Login">
-      <form className={classes.form}>
+      <form className={classes.form} onSubmit={submitHandler}>
         <Typography component="h1" variant="h1">
           Login
         </Typography>
@@ -27,6 +39,7 @@ const Login = () => {
               variant="outlined"
               label="Email"
               inputProps={{ type: 'email' }}
+              onChange={(e) => setEmail(e.target.value)}
             ></TextField>
           </ListItem>
           <ListItem>
@@ -36,6 +49,7 @@ const Login = () => {
               variant="outlined"
               label="Password"
               inputProps={{ type: 'password' }}
+              onChange={(e) => setpassword(e.target.value)}
             ></TextField>
           </ListItem>
           <ListItem>
@@ -50,8 +64,8 @@ const Login = () => {
             </Button>
           </ListItem>
           <ListItem>
-            Don't have an Account? &nbsp;
-             {' '} <NextLink href="/register" passHref> 
+            Don't have an Account? &nbsp;{' '}
+            <NextLink href="/register" passHref>
               <Link>Register</Link>
             </NextLink>
           </ListItem>
