@@ -24,8 +24,7 @@ const Shipping = () => {
     setValue,
   } = useForm();
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
-  const router = useRouter();
-  const redirect = router.query;
+  const { router } = useRouter();
   const classes = useStyles();
   const { state, dispatch } = useContext(Store);
   const {
