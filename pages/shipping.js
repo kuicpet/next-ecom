@@ -14,23 +14,33 @@ import { useRouter } from 'next/router';
 import { Store } from '../utils/Store';
 import { Controller, useForm } from 'react-hook-form';
 import { useSnackbar } from 'notistack';
+import CheckOutSteps from '../components/CheckOutSteps';
 
 const Shipping = () => {
   const {
     handleSubmit,
     control,
     formState: { errors },
+    setValue,
   } = useForm();
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const router = useRouter();
   const redirect = router.query;
   const classes = useStyles();
   const { state, dispatch } = useContext(Store);
-  const { userInfo } = state;
+  const {
+    userInfo,
+    cart: { shippingAddress },
+  } = state;
   useEffect(() => {
     if (!userInfo) {
       router.push('/login?redirect=/shipping');
     }
+    setValue('fullName', shippingAddress.fullName);
+    setValue('address', shippingAddress.address);
+    setValue('city', shippingAddress.city);
+    setValue('postalCode', shippingAddress.postalCode);
+    setValue('country', shippingAddress.country);
   }, []);
   // const [name, setName] = useState('');
   // const [email, setEmail] = useState('');
@@ -48,17 +58,21 @@ const Shipping = () => {
       type: 'SAVE_SHIPPING_ADDRESS',
       payload: { fullName, address, city, postalCode, country },
     });
-    Cookies.set('shippingAddress', JSON.stringify({
-      fullName,
-      address,
-      city,
-      postalCode,
-      country,
-    }));
+    Cookies.set(
+      'shippingAddress',
+      JSON.stringify({
+        fullName,
+        address,
+        city,
+        postalCode,
+        country,
+      })
+    );
     router.push('/payment');
   };
   return (
     <Layout title="Shipping Address">
+      <CheckOutSteps activeStep={1} />
       <form className={classes.form} onSubmit={handleSubmit(submitHandler)}>
         <Typography component="h1" variant="h1">
           Shipping Address
@@ -92,7 +106,7 @@ const Shipping = () => {
               )}
             ></Controller>
           </ListItem>
-          
+
           <ListItem>
             <Controller
               name="address"
@@ -121,7 +135,7 @@ const Shipping = () => {
               )}
             ></Controller>
           </ListItem>
-          
+
           <ListItem>
             <Controller
               name="city"
@@ -150,7 +164,7 @@ const Shipping = () => {
               )}
             ></Controller>
           </ListItem>
-          
+
           <ListItem>
             <Controller
               name="postalCode"
@@ -179,7 +193,7 @@ const Shipping = () => {
               )}
             ></Controller>
           </ListItem>
-          
+
           <ListItem>
             <Controller
               name="country"
@@ -208,7 +222,7 @@ const Shipping = () => {
               )}
             ></Controller>
           </ListItem>
-          
+
           <ListItem>
             <Button
               variant="contained"
