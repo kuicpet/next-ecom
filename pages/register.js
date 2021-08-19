@@ -6,16 +6,18 @@ import {
   Typography,
   Link,
 } from '@material-ui/core';
+import axios from 'axios';
 import React, { useContext, useEffect } from 'react';
 import NextLink from 'next/link';
+import Cookies from 'js-cookie';
 import Layout from '../components/Layout';
 import useStyles from '../utils/styles';
 import { useRouter } from 'next/router';
 import { Store } from '../utils/Store';
 import { Controller, useForm } from 'react-hook-form';
 import { useSnackbar } from 'notistack';
-import axios from 'axios';
-import Cookies from 'js-cookie';
+
+
 
 const Register = () => {
   const {
@@ -53,7 +55,7 @@ const Register = () => {
       });
       dispatch({ type: 'USER_LOGIN', payload: data });
       console.log(data);
-      Cookies.set('userInfo', data);
+      Cookies.set('userInfo', JSON.stringify(data));
       router.push(redirect || '/');
     } catch (error) {
       enqueueSnackbar(

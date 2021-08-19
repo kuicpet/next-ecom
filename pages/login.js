@@ -45,11 +45,12 @@ const Login = () => {
       });
       dispatch({ type: 'USER_LOGIN', payload: data });
       console.log(data);
-      Cookies.set('userInfo', data);
+      Cookies.set('userInfo', JSON.stringify(data));
+      localStorage.setItem('user', JSON.stringify(data))
       router.push(redirect || '/');
     } catch (error) {
       enqueueSnackbar(
-        error.response.data ? error.response.data.message : error.message,
+        error.response ? error.response.data.message : error.message,
         { variant: 'error' }
       );
     }
