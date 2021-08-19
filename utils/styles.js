@@ -36,7 +36,7 @@ const useStyles = makeStyles({
   },
   navbarBtn: {
     color: '#fff',
-    textTransform: 'initial',
+    textTransform: 'uppercase',
   },
 });
 
