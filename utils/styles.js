@@ -38,6 +38,9 @@ const useStyles = makeStyles({
     color: '#fff',
     textTransform: 'uppercase',
   },
+  transparent: {
+    backgroundColor: 'transparent'
+  }
 });
 
 export default useStyles;

@@ -13,7 +13,6 @@ import useStyles from '../utils/styles';
 import { useRouter } from 'next/router';
 import { Store } from '../utils/Store';
 import { Controller, useForm } from 'react-hook-form';
-import { useSnackbar } from 'notistack';
 import CheckOutSteps from '../components/CheckOutSteps';
 
 const Shipping = () => {
@@ -23,8 +22,8 @@ const Shipping = () => {
     formState: { errors },
     setValue,
   } = useForm();
-  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
-  const { router } = useRouter();
+  
+  const  router  = useRouter();
   const classes = useStyles();
   const { state, dispatch } = useContext(Store);
   const {
