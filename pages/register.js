@@ -16,8 +16,7 @@ import { useRouter } from 'next/router';
 import { Store } from '../utils/Store';
 import { Controller, useForm } from 'react-hook-form';
 import { useSnackbar } from 'notistack';
-
-
+import { getError } from '../utils/error';
 
 const Register = () => {
   const {
@@ -58,10 +57,7 @@ const Register = () => {
       Cookies.set('userInfo', JSON.stringify(data));
       router.push(redirect || '/');
     } catch (error) {
-      enqueueSnackbar(
-        error.response ? error.response.data.message : error.message,
-        { variant: 'error' }
-      );
+      enqueueSnackbar(getError(error), { variant: 'error' });
     }
   };
   return (

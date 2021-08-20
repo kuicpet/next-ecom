@@ -16,6 +16,7 @@ import { useRouter } from 'next/dist/client/router';
 import Cookies from 'js-cookie';
 import { Controller, useForm } from 'react-hook-form';
 import { useSnackbar } from 'notistack';
+import { getError } from '../utils/error';
 
 const Login = () => {
   const {
@@ -46,13 +47,10 @@ const Login = () => {
       dispatch({ type: 'USER_LOGIN', payload: data });
       console.log(data);
       Cookies.set('userInfo', JSON.stringify(data));
-      localStorage.setItem('user', JSON.stringify(data))
+      localStorage.setItem('user', JSON.stringify(data));
       router.push(redirect || '/');
     } catch (error) {
-      enqueueSnackbar(
-        error.response ? error.response.data.message : error.message,
-        { variant: 'error' }
-      );
+      enqueueSnackbar(getError(error), { variant: 'error' });
     }
   };
   return (

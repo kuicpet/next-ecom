@@ -15,8 +15,9 @@ import {
   List,
   ListItem,
   Card,
+  CircularProgress,
 } from '@material-ui/core';
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import NextLink from 'next/link';
 import Layout from '../components/Layout';
@@ -25,26 +26,65 @@ import useStyles from '../utils/styles';
 import axios from 'axios';
 import { useRouter } from 'next/router';
 import CheckOutSteps from '../components/CheckOutSteps';
+import { useSnackbar } from 'notistack';
+import { getError } from '../utils/error';
+import Cookies from 'js-cookie';
 
 const PlaceOrder = () => {
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
   const { state, dispatch } = useContext(Store);
   const {
     cart: { cartItems, shippingAddress, paymentMethod },
+    userInfo,
   } = state;
   const classes = useStyles();
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
   const round2 = (num) => Math.round(num * 100 + Number.EPSILON) / 100;
   const itemsPrice = round2(cartItems.reduce((a, c) => a + c.price * c.qty, 0));
   const shippingPrice = round2(itemsPrice > 200 ? 0 : 15);
   const taxPrice = round2(itemsPrice * 0.15);
   const totalPrice = round2(itemsPrice + shippingPrice + taxPrice);
-  
+
   useEffect(() => {
-      if(!paymentMethod){
-          router.push('/payment')
-      }
-  }, [])
+    if (!paymentMethod) {
+      router.push('/payment');
+    }
+  }, []);
+
+  const placeOrderHandler = async (e) => {
+    closeSnackbar();
+    e.preventDefault();
+    try {
+      setLoading(true);
+      const { data } = await axios.post(
+        '/api/orders',
+        {
+          orderItems: cartItems,
+          shippingAddress,
+          paymentMethod,
+          itemsPrice,
+          shippingAddress,
+          taxPrice,
+          totalPrice,
+        },
+        {
+          headers: {
+            authorization: `Bearer ${userInfo.token}`,
+          },
+        }
+      );
+      dispatch({ type: 'CART_CLEAR' });
+      Cookies.remove('cartItems');
+      setLoading(false);
+      router.push(`/order/${data._id}`)
+    } catch (error) {
+      setLoading(false);
+      enqueueSnackbar(getError(error), { variant: 'error' });
+    }
+  };
+
   return (
     <Layout title="Place Order">
       <CheckOutSteps activeStep={3} />
@@ -151,7 +191,7 @@ const PlaceOrder = () => {
                     <Typography>Item:</Typography>
                   </Grid>
                   <Grid item xs={6}>
-                    <Typography align='right'>${itemsPrice}</Typography>
+                    <Typography align="right">${itemsPrice}</Typography>
                   </Grid>
                 </Grid>
               </ListItem>
@@ -161,7 +201,7 @@ const PlaceOrder = () => {
                     <Typography>Tax:</Typography>
                   </Grid>
                   <Grid item xs={6}>
-                    <Typography align='right'>${taxPrice}</Typography>
+                    <Typography align="right">${taxPrice}</Typography>
                   </Grid>
                 </Grid>
               </ListItem>
@@ -171,7 +211,7 @@ const PlaceOrder = () => {
                     <Typography>Shipping:</Typography>
                   </Grid>
                   <Grid item xs={6}>
-                    <Typography align='right'>${shippingPrice}</Typography>
+                    <Typography align="right">${shippingPrice}</Typography>
                   </Grid>
                 </Grid>
               </ListItem>
@@ -183,7 +223,7 @@ const PlaceOrder = () => {
                     </Typography>
                   </Grid>
                   <Grid item xs={6}>
-                    <Typography align='right'>
+                    <Typography align="right">
                       <strong>${totalPrice}</strong>
                     </Typography>
                   </Grid>
@@ -191,6 +231,7 @@ const PlaceOrder = () => {
               </ListItem>
               <ListItem>
                 <Button
+                  onClick={placeOrderHandler}
                   variant="contained"
                   color="primary"
                   fullWidth
@@ -199,6 +240,11 @@ const PlaceOrder = () => {
                   Place Order
                 </Button>
               </ListItem>
+              {loading && (
+                <ListItem>
+                  <CircularProgress />
+                </ListItem>
+              )}
             </List>
           </Card>
         </Grid>
