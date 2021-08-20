@@ -40,6 +40,9 @@ const useStyles = makeStyles({
   },
   transparent: {
     backgroundColor: 'transparent'
+  },
+  capitalize : {
+    textTransform: 'capitalize'
   }
 });
 
