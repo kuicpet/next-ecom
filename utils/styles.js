@@ -39,11 +39,14 @@ const useStyles = makeStyles({
     textTransform: 'uppercase',
   },
   transparent: {
-    backgroundColor: 'transparent'
+    backgroundColor: 'transparent',
   },
-  capitalize : {
-    textTransform: 'capitalize'
-  }
+  capitalize: {
+    textTransform: 'capitalize',
+  },
+  error: {
+    color: '#f04040',
+  },
 });
 
 export default useStyles;
