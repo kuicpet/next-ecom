@@ -51,6 +51,9 @@ const PlaceOrder = () => {
     if (!paymentMethod) {
       router.push('/payment');
     }
+    if(cartItems.length === 0){
+      router.push('/cart')
+    }
   }, []);
 
   const placeOrderHandler = async (e) => {
