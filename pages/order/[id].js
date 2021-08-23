@@ -26,7 +26,8 @@ import useStyles from '../../utils/styles';
 import axios from 'axios';
 import { useRouter } from 'next/router';
 import { useSnackbar } from 'notistack';
-import { getError } from '../../utils/error';
+import { getError, onError } from '../../utils/error';
+import { PayPalButtons, usePayPalScriptReducer } from '@paypal/react-paypal-js';
 
 function reducer(state, action) {
   switch (action.type) {
@@ -51,6 +52,26 @@ function reducer(state, action) {
         error: action.payload,
       };
       break;
+    case 'PAY_REQUEST':
+      return {
+        ...state,
+        loadingPay: true,
+      };
+      break;
+    case 'PAY_SUCCESS':
+      return {
+        ...state,
+        loadingPay: false,
+        successPay: true, 
+      };
+      break;
+    case 'PAY_FAIL':
+      return {
+        ...state,
+        loadingPay: false,
+        errorPay: action.payload,
+      };
+      break;
 
     default:
       state;
@@ -60,10 +81,12 @@ function reducer(state, action) {
 
 const Order = ({ params }) => {
   const orderId = params.id;
+  const [{ isPending }, paypalDispatch] = usePayPalScriptReducer();
   const router = useRouter();
   const { state } = useContext(Store);
   const { userInfo } = state;
   const classes = useStyles();
+  const { enqueueSnackbar } = useSnackbar();
 
   const [{ loading, error, order }, dispatch] = useReducer(reducer, {
     loading: true,
@@ -81,7 +104,7 @@ const Order = ({ params }) => {
     isDelivered,
     deliveredAt,
     isPaid,
-    paidAt
+    paidAt,
   } = order;
   useEffect(() => {
     if (!userInfo) {
@@ -102,9 +125,62 @@ const Order = ({ params }) => {
     };
     if (!order._id || (order._id && order._id !== orderId)) {
       fetchOrder();
+    } else {
+      const loadPaypalScript = async () => {
+        const { data: clientId } = await axios.get('/api/keys/paypal', {
+          headers: {
+            authorization: `Bearer ${userInfo.token}`,
+          },
+        });
+        paypalDispatch({
+          type: 'resetOptions',
+          value: {
+            'client-id': clientId,
+            currency: 'USD',
+          },
+        });
+        paypalDispatch({ type: 'setLoadingStatus', value: 'pending' });
+      };
+      loadPaypalScript();
     }
   }, [order]);
-
+  const createOrder = (data, actions) => {
+    return actions.order
+      .create({
+        purchase_units: [
+          {
+            amount: { value: totalPrice },
+          },
+        ],
+      })
+      .then((orderID) => {
+        return orderID;
+      });
+  };
+  const onApprove = (data, actions) => {
+    return actions.order.capture().then(async (details) => {
+      try {
+        dispatch({ type: 'PAY_REQUEST' });
+        const { data } = await axios.put(
+          `/api/orders/${order._id}/pay`,
+          details,
+          {
+            headers: {
+              authorization: `Bearer ${userInfo.token}`,
+            },
+          }
+        );
+        dispatch({ type: 'PAY_SUCCESS', payload: data });
+        enqueueSnackbar('Order is paid', { variant: 'success' });
+      } catch (error) {
+        dispatch({ type: 'PAY_FAIL', payload: getError(error) });
+        enqueueSnackbar(getError(error), { variant: 'error' });
+      }
+    });
+  };
+  const onError = (error) => {
+    enqueueSnackbar(getError(error), { variant: 'error' });
+  };
   return (
     <Layout title={`Order ${orderId}`}>
       <Typography component="h1" variant="h1">
@@ -133,8 +209,10 @@ const Order = ({ params }) => {
                 </ListItem>
                 <ListItem>
                   <Typography className={classes.capitalize}>
-                   Status: {' '}
-                   {isDelivered? `delivered at ${deliveredAt}`: 'not delivered'}
+                    Status:{' '}
+                    {isDelivered
+                      ? `delivered at ${deliveredAt}`
+                      : 'not delivered'}
                   </Typography>
                 </ListItem>
               </List>
@@ -148,8 +226,7 @@ const Order = ({ params }) => {
                 </ListItem>
                 <ListItem>
                   <Typography className={classes.capitalize}>
-                   Status: {' '}
-                   {isPaid? `paid at ${paidAt}`: 'not paid'}
+                    Status: {isPaid ? `paid at ${paidAt}` : 'not paid'}
                   </Typography>
                 </ListItem>
                 <ListItem>
@@ -264,6 +341,21 @@ const Order = ({ params }) => {
                     </Grid>
                   </Grid>
                 </ListItem>
+                {!isPaid && (
+                  <ListItem>
+                    {isPending ? (
+                      <CircularProgress />
+                    ) : (
+                      <div className={classes.fullWidth}>
+                        <PayPalButtons
+                          createOrder={createOrder}
+                          onApprove={onApprove}
+                          onError={onError}
+                        />
+                      </div>
+                    )}
+                  </ListItem>
+                )}
               </List>
             </Card>
           </Grid>
