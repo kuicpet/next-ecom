@@ -18,8 +18,10 @@ import db from '../../utils/db';
 import Product from '../../models/Products';
 import axios from 'axios';
 import { Store } from '../../utils/Store';
+import { useSnackbar } from 'notistack';
 
 const ProductPage = (props) => {
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const { state, dispatch } = useContext(Store);
   const { product } = props;
   const classes = useStyles();
@@ -31,11 +33,12 @@ const ProductPage = (props) => {
   }
 
   const addToCartHandler = async (product) => {
+    closeSnackbar();
     const existItem = state.cart.cartItems.find((x) => x._id === product._id);
     const qty = existItem ? existItem.qty + 1 : 1;
     const { data } = await axios.get(`/api/products/${product._id}`);
     if (data.countInStock < qty) {
-      window.alert('Sorry, Product out of Stock');
+      enqueueSnackbar('Sorry, Product out of Stock', {variant: 'error'})
       return;
     }
     dispatch({ type: 'CART_ADD_ITEM', payload: { ...product, qty } });

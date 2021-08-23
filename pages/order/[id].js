@@ -17,7 +17,7 @@ import {
   Card,
   CircularProgress,
 } from '@material-ui/core';
-import React, { useContext, useEffect, useReducer} from 'react';
+import React, { useContext, useEffect, useReducer, useState } from 'react';
 import dynamic from 'next/dynamic';
 import NextLink from 'next/link';
 import Layout from '../../components/Layout';
@@ -25,58 +25,68 @@ import { Store } from '../../utils/Store';
 import useStyles from '../../utils/styles';
 import axios from 'axios';
 import { useRouter } from 'next/router';
-import CheckOutSteps from '../../components/CheckOutSteps';
 import { useSnackbar } from 'notistack';
 import { getError } from '../../utils/error';
-
 
 function reducer(state, action) {
   switch (action.type) {
     case 'FETCH_REQUEST':
-      return { ...state, loading: true };
-    case 'FETCH_SUCCES':
-      return { ...state, loading: false, order: action.payload, error: '' };
+      return {
+        ...state,
+        loading: true,
+      };
+      break;
+    case 'FETCH_SUCCESS':
+      return {
+        ...state,
+        loading: false,
+        order: action.payload,
+        error: '',
+      };
+      break;
     case 'FETCH_FAIL':
-      return { ...state, loading: false, error: action.payload };
+      return {
+        ...state,
+        loading: false,
+        error: action.payload,
+      };
+      break;
 
     default:
       state;
+      break;
   }
 }
 
 const Order = ({ params }) => {
   const orderId = params.id;
-
   const router = useRouter();
   const { state } = useContext(Store);
   const { userInfo } = state;
   const classes = useStyles();
-  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
   const [{ loading, error, order }, dispatch] = useReducer(reducer, {
     loading: true,
-    order: {},
     error: '',
+    order: {},
   });
-
   const {
     shippingAddress,
     paymentMethod,
     orderItems,
     itemsPrice,
+    shippingPrice,
     taxPrice,
     totalPrice,
-    isPaid,
-    paidAt,
     isDelivered,
-    deliveredAt
+    deliveredAt,
+    isPaid,
+    paidAt
   } = order;
-
   useEffect(() => {
     if (!userInfo) {
       return router.push('/login');
     }
-
     const fetchOrder = async () => {
       try {
         dispatch({ type: 'FETCH_REQUEST' });
@@ -97,9 +107,8 @@ const Order = ({ params }) => {
 
   return (
     <Layout title={`Order ${orderId}`}>
-      <CheckOutSteps activeStep={3} />
       <Typography component="h1" variant="h1">
-        OrderId: {orderId}
+        Order {orderId}
       </Typography>
       {loading ? (
         <CircularProgress />
@@ -123,8 +132,9 @@ const Order = ({ params }) => {
                   </Typography>
                 </ListItem>
                 <ListItem>
-                  <Typography>
-                   Status: {isDelivered ? `delivered at ${deliveredAt}`: 'not delivered'}
+                  <Typography className={classes.capitalize}>
+                   Status: {' '}
+                   {isDelivered? `delivered at ${deliveredAt}`: 'not delivered'}
                   </Typography>
                 </ListItem>
               </List>
@@ -138,12 +148,13 @@ const Order = ({ params }) => {
                 </ListItem>
                 <ListItem>
                   <Typography className={classes.capitalize}>
-                    {paymentMethod}
+                   Status: {' '}
+                   {isPaid? `paid at ${paidAt}`: 'not paid'}
                   </Typography>
                 </ListItem>
                 <ListItem>
-                  <Typography>
-                   Status: {isPaid ? `paid at ${paidAt}`: 'not paid'}
+                  <Typography className={classes.capitalize}>
+                    {paymentMethod}
                   </Typography>
                 </ListItem>
               </List>
@@ -263,7 +274,11 @@ const Order = ({ params }) => {
 };
 
 export async function getServerSideProps({ params }) {
-  return { props: { params } };
+  return {
+    props: {
+      params,
+    },
+  };
 }
 
 export default dynamic(() => Promise.resolve(Order), { ssr: false });
