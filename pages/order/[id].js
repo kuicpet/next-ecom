@@ -62,7 +62,7 @@ function reducer(state, action) {
       return {
         ...state,
         loadingPay: false,
-        successPay: true, 
+        successPay: true,
       };
       break;
     case 'PAY_FAIL':
@@ -70,6 +70,14 @@ function reducer(state, action) {
         ...state,
         loadingPay: false,
         errorPay: action.payload,
+      };
+      break;
+    case 'PAY_RESET':
+      return {
+        ...state,
+        loadingPay: false,
+        successPay: false,
+        errorPay: '',
       };
       break;
 
@@ -88,11 +96,14 @@ const Order = ({ params }) => {
   const classes = useStyles();
   const { enqueueSnackbar } = useSnackbar();
 
-  const [{ loading, error, order }, dispatch] = useReducer(reducer, {
-    loading: true,
-    error: '',
-    order: {},
-  });
+  const [{ loading, error, order, successPay }, dispatch] = useReducer(
+    reducer,
+    {
+      loading: true,
+      error: '',
+      order: {},
+    }
+  );
   const {
     shippingAddress,
     paymentMethod,
@@ -123,8 +134,11 @@ const Order = ({ params }) => {
         dispatch({ type: 'FETCH_ERROR', payload: getError(error) });
       }
     };
-    if (!order._id || (order._id && order._id !== orderId)) {
+    if (!order._id || successPay || (order._id && order._id !== orderId)) {
       fetchOrder();
+      if(successPay){
+        dispatch({type: 'PAY_RESET'})
+      }
     } else {
       const loadPaypalScript = async () => {
         const { data: clientId } = await axios.get('/api/keys/paypal', {
@@ -143,7 +157,7 @@ const Order = ({ params }) => {
       };
       loadPaypalScript();
     }
-  }, [order]);
+  }, [order, successPay]);
   const createOrder = (data, actions) => {
     return actions.order
       .create({
