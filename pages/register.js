@@ -19,7 +19,7 @@ import { useSnackbar } from 'notistack';
 import { getError } from '../utils/error';
 
 const Register = () => {
-  const {
+  const { 
     handleSubmit,
     control,
     formState: { errors },
