@@ -87,7 +87,7 @@ const AdminDashboard = () => {
                   <ListItemText primary="Products"></ListItemText>
                 </ListItem>
               </NextLink>
-              <NextLink href="/admin/dashboard" passHref>
+              <NextLink href="/admin/users" passHref>
                 <ListItem button component="a">
                   <ListItemText primary="Users"></ListItemText>
                 </ListItem>

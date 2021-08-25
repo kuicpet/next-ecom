@@ -61,7 +61,7 @@ const AdminProducts = () => {
   const [{ loading, error, products }, dispatch] = useReducer(reducer, {
     loading: true,
     error: '',
-    productss: [],
+    products: [],
   });
   useEffect(() => {
     if (!userInfo) {
@@ -104,7 +104,7 @@ const AdminProducts = () => {
                   <ListItemText primary="Products"></ListItemText>
                 </ListItem>
               </NextLink>
-              <NextLink href="/admin/dashboard" passHref>
+              <NextLink href="/admin/users" passHref>
                 <ListItem button component="a">
                   <ListItemText primary="Users"></ListItemText>
                 </ListItem>
