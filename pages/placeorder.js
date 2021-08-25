@@ -167,7 +167,7 @@ const PlaceOrder = () => {
                               </Link>
                             </NextLink>
                           </TableCell>
-                          <TableCell>
+                          <TableCell align="right">
                             <Typography>{item.qty}</Typography>
                           </TableCell>
                           <TableCell align="right">

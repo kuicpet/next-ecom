@@ -36,7 +36,6 @@ function reducer(state, action) {
         ...state,
         loading: true,
       };
-      break;
     case 'FETCH_SUCCESS':
       return {
         ...state,
@@ -44,34 +43,29 @@ function reducer(state, action) {
         order: action.payload,
         error: '',
       };
-      break;
     case 'FETCH_FAIL':
       return {
         ...state,
         loading: false,
         error: action.payload,
       };
-      break;
     case 'PAY_REQUEST':
       return {
         ...state,
         loadingPay: true,
       };
-      break;
     case 'PAY_SUCCESS':
       return {
         ...state,
         loadingPay: false,
         successPay: true,
       };
-      break;
     case 'PAY_FAIL':
       return {
         ...state,
         loadingPay: false,
         errorPay: action.payload,
       };
-      break;
     case 'PAY_RESET':
       return {
         ...state,
@@ -79,11 +73,33 @@ function reducer(state, action) {
         successPay: false,
         errorPay: '',
       };
-      break;
+    case 'DELIVER_REQUEST':
+      return {
+        ...state,
+        loadingDeliver: true,
+      };
+    case 'DELIVER_SUCCESS':
+      return {
+        ...state,
+        loadingDeliver: false,
+        successDeliver: true,
+      };
+    case 'DELIVER_FAIL':
+      return {
+        ...state,
+        loadingDeliver: false,
+        errorDeliver: action.payload,
+      };
+    case 'DELIVER_RESET':
+      return {
+        ...state,
+        loadingDeliver: false,
+        successDeliver: false,
+        errorDeliver: '',
+      };
 
     default:
-      state;
-      break;
+      return state;
   }
 }
 
@@ -96,14 +112,14 @@ const Order = ({ params }) => {
   const classes = useStyles();
   const { enqueueSnackbar } = useSnackbar();
 
-  const [{ loading, error, order, successPay }, dispatch] = useReducer(
-    reducer,
-    {
-      loading: true,
-      error: '',
-      order: {},
-    }
-  );
+  const [
+    { loading, error, order, successPay, successDeliver, loadingDeliver },
+    dispatch,
+  ] = useReducer(reducer, {
+    loading: true,
+    error: '',
+    order: {},
+  });
   const {
     shippingAddress,
     paymentMethod,
@@ -134,10 +150,18 @@ const Order = ({ params }) => {
         dispatch({ type: 'FETCH_ERROR', payload: getError(error) });
       }
     };
-    if (!order._id || successPay || (order._id && order._id !== orderId)) {
+    if (
+      !order._id ||
+      successPay ||
+      successDeliver ||
+      (order._id && order._id !== orderId)
+    ) {
       fetchOrder();
-      if(successPay){
-        dispatch({type: 'PAY_RESET'})
+      if (successPay) {
+        dispatch({ type: 'PAY_RESET' });
+      }
+      if (successDeliver) {
+        dispatch({ type: 'DELIVER_RESET' });
       }
     } else {
       const loadPaypalScript = async () => {
@@ -157,7 +181,7 @@ const Order = ({ params }) => {
       };
       loadPaypalScript();
     }
-  }, [order, successPay]);
+  }, [orderId, successPay, successDeliver]);
   const createOrder = (data, actions) => {
     return actions.order
       .create({
@@ -194,6 +218,21 @@ const Order = ({ params }) => {
   };
   const onError = (error) => {
     enqueueSnackbar(getError(error), { variant: 'error' });
+  };
+  const deliverOrderHandler = async () => {
+    try {
+      dispatch({type: 'DELIVER_REQUEST'})
+      const {data} = await axios.put(`/api/orders/${order._id}/deliver`, {}, {
+        headers: {
+          authorization: `Bearer ${userInfo.token}`,
+        },
+      })
+      dispatch({type: 'DELIVER_SUCCESS', payload: data})
+      enqueueSnackbar('Order is delivered', {variant: 'success'})
+    } catch (error) {
+      dispatch({ type: 'DELIVER_FAIL', payload: getError(error) });
+      enqueueSnackbar(getError(error), { variant: 'error' });
+    }
   };
   return (
     <Layout title={`Order ${orderId}`}>
@@ -240,12 +279,12 @@ const Order = ({ params }) => {
                 </ListItem>
                 <ListItem>
                   <Typography className={classes.capitalize}>
-                    Status: {isPaid ? `paid at ${paidAt}` : 'not paid'}
+                    {paymentMethod}
                   </Typography>
                 </ListItem>
                 <ListItem>
                   <Typography className={classes.capitalize}>
-                    {paymentMethod}
+                    Status: {isPaid ? `paid at ${paidAt}` : 'not paid'}
                   </Typography>
                 </ListItem>
               </List>
@@ -272,7 +311,7 @@ const Order = ({ params }) => {
                         {orderItems.map((item) => (
                           <TableRow key={item._id}>
                             <TableCell>
-                              <NextLink href={`/product/${item.slug}`} passHref>
+                              <NextLink href={`/product/${item._id}`} passHref>
                                 <Link>
                                   <Image
                                     src={item.image}
@@ -284,7 +323,7 @@ const Order = ({ params }) => {
                               </NextLink>
                             </TableCell>
                             <TableCell>
-                              <NextLink href={`/product/${item.slug}`} passHref>
+                              <NextLink href={`/product/${item._id}`} passHref>
                                 <Link>
                                   <Typography>{item.name}</Typography>
                                 </Link>
@@ -368,6 +407,19 @@ const Order = ({ params }) => {
                         />
                       </div>
                     )}
+                  </ListItem>
+                )}
+                {userInfo.isAdmin && order.isPaid && !order.isDelivered && (
+                  <ListItem>
+                    {loadingDeliver && <CircularProgress/>}
+                    <Button
+                      variant='contained'
+                      color='primary'
+                      className={classes.button}
+                      onClick={deliverOrderHandler}
+                    >
+                      Deliver Order
+                    </Button>
                   </ListItem>
                 )}
               </List>
