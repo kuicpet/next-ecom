@@ -23,6 +23,7 @@ import Layout from '../../components/Layout';
 import { getError } from '../../utils/error';
 import { Store } from '../../utils/Store';
 import useStyles from '../../utils/styles';
+import { useSnackbar } from 'notistack';
 
 function reducer(state, action) {
   switch (action.type) {
@@ -31,7 +32,6 @@ function reducer(state, action) {
         ...state,
         loading: true,
       };
-
     case 'FETCH_SUCCESS':
       return {
         ...state,
@@ -39,12 +39,33 @@ function reducer(state, action) {
         products: action.payload,
         error: '',
       };
-
     case 'FETCH_FAIL':
       return {
         ...state,
         loading: false,
         error: action.payload,
+      };
+    case 'DELETE_REQUEST':
+      return {
+        ...state,
+        loadingDelete: true,
+      };
+    case 'DELETE_SUCCESS':
+      return {
+        ...state,
+        loadingDelete: false,
+        successDelete: true,
+      };
+    case 'DELETE_FAIL':
+      return {
+        ...state,
+        loadingDelete: false,
+      };
+    case 'DELETE_RESET':
+      return {
+        ...state,
+        loadingDelete: false,
+        successDelete: false,
       };
 
     default:
@@ -63,11 +84,12 @@ const AdminProducts = () => {
     error: '',
     products: [],
   });
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   useEffect(() => {
     if (!userInfo) {
       router.push('/login');
     }
-    const fetchOrders = async () => {
+    const fetchProducts = async () => {
       try {
         dispatch({ type: 'FETCH_REQUEST' });
         const { data } = await axios.get('/api/admin/products', {
@@ -76,13 +98,31 @@ const AdminProducts = () => {
           },
         });
         dispatch({ type: 'FETCH_SUCCESS', payload: data });
-        console.log(data);
+        //console.log(data);
       } catch (error) {
-        dispatch({ type: 'FETCH_ERROR', payload: getError(error) });
+        dispatch({ type: 'FETCH_FAIL', payload: getError(error) });
       }
     };
-    fetchOrders();
+    fetchProducts();
   }, []);
+  const deleteHandler = async (productId) => {
+    if (!window.confirm('Are you sure')) {
+      return;
+    }
+    try {
+      dispatch({ type: 'DELETE_REQUEST' });
+      await axios.delete(`/api/admin/products/${productId}`, {
+        headers: {
+          authorization: `Bearer ${userInfo.token}`,
+        },
+      });
+      dispatch({ type: 'DELETE_SUCCESS' });
+      enqueueSnackbar('Product deleted successfully', { variant: 'success' });
+    } catch (error) {
+      dispatch({ type: 'DELETE_FAIL' });
+      enqueueSnackbar(getError(error), { variant: 'error' });
+    }
+  };
   return (
     <Layout title="Products">
       <Grid container spacing={1}>
@@ -123,7 +163,11 @@ const AdminProducts = () => {
                     </Typography>
                   </Grid>
                   <Grid item align="right" xs={6}>
-                    <Button variant="contained" color="primary" className={classes.button}>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      className={classes.button}
+                    >
                       Create
                     </Button>
                   </Grid>
@@ -166,7 +210,11 @@ const AdminProducts = () => {
                                   Edit
                                 </Button>
                               </NextLink>{' '}
-                              <Button variant="contained" size="small">
+                              <Button
+                                variant="contained"
+                                size="small"
+                                onClick={() => deleteHandler(product._id)}
+                              >
                                 Delete
                               </Button>
                             </TableCell>

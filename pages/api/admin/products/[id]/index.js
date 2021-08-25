@@ -43,7 +43,7 @@ handler.delete(async (req, res) => {
   if (product) {
     await product.remove();
     await db.disconnect();
-    res.send({ meaasge: 'Product deleted' });
+    res.send({ meaasge: 'Product deleted successfully' });
   } else {
       await db.disconnect()
       res.status(404).send({message: 'product not found'})

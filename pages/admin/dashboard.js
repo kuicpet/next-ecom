@@ -105,7 +105,7 @@ const AdminDashboard = () => {
                   <Typography className={classes.error}>{error}</Typography>
                 ) : (
                   <Grid container spacing={5}>
-                    <Grid item md={3}>
+                    <Grid item md={4} xs={12}>
                       <Card raised>
                         <CardContent>
                           <Typography variant="h1">
@@ -122,7 +122,7 @@ const AdminDashboard = () => {
                         </CardActions>
                       </Card>
                     </Grid>
-                    <Grid item md={3}>
+                    <Grid item md={4} xs={12}>
                       <Card raised>
                         <CardContent>
                           <Typography variant="h1">
@@ -139,7 +139,7 @@ const AdminDashboard = () => {
                         </CardActions>
                       </Card>
                     </Grid>
-                    <Grid item md={3}>
+                    <Grid item md={4} xs={12}>
                       <Card raised>
                         <CardContent>
                           <Typography variant="h1">
