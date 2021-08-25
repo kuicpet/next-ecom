@@ -36,7 +36,7 @@ function reducer(state, action) {
       return {
         ...state,
         loading: false,
-        orders: action.payload,
+        products: action.payload,
         error: '',
       };
 
@@ -53,15 +53,15 @@ function reducer(state, action) {
   }
 }
 
-const AdminOrders = () => {
+const AdminProducts = () => {
   const router = useRouter();
   const classes = useStyles();
   const { state } = useContext(Store);
   const { userInfo } = state;
-  const [{ loading, error, orders }, dispatch] = useReducer(reducer, {
+  const [{ loading, error, products }, dispatch] = useReducer(reducer, {
     loading: true,
     error: '',
-    orders: [],
+    productss: [],
   });
   useEffect(() => {
     if (!userInfo) {
@@ -70,7 +70,7 @@ const AdminOrders = () => {
     const fetchOrders = async () => {
       try {
         dispatch({ type: 'FETCH_REQUEST' });
-        const { data } = await axios.get('/api/admin/orders', {
+        const { data } = await axios.get('/api/admin/products', {
           headers: {
             authorization: `Bearer ${userInfo.token}`,
           },
@@ -84,23 +84,23 @@ const AdminOrders = () => {
     fetchOrders();
   }, []);
   return (
-    <Layout title="Orders">
+    <Layout title="Products">
       <Grid container spacing={1}>
         <Grid item md={3} xs={12}>
           <Card className={classes.section}>
             <List>
               <NextLink href="/admin/dashboard" passHref>
-                <ListItem  button component="a">
+                <ListItem button component="a">
                   <ListItemText primary="Admin Dashboard"></ListItemText>
                 </ListItem>
               </NextLink>
               <NextLink href="/admin/orders" passHref>
-                <ListItem selected button component="a">
+                <ListItem button component="a">
                   <ListItemText primary="Orders"></ListItemText>
                 </ListItem>
               </NextLink>
               <NextLink href="/admin/products" passHref>
-                <ListItem button component="a">
+                <ListItem selected button component="a">
                   <ListItemText primary="Products"></ListItemText>
                 </ListItem>
               </NextLink>
@@ -116,9 +116,18 @@ const AdminOrders = () => {
           <Card className={classes.section}>
             <List>
               <ListItem>
-                <Typography component="h1" variant="h1">
-                  Orders
-                </Typography>
+                <Grid container alignItems="center">
+                  <Grid item xs={6}>
+                    <Typography component="h1" variant="h1">
+                      Products
+                    </Typography>
+                  </Grid>
+                  <Grid item align="right" xs={6}>
+                    <Button variant="contained" color="primary" className={classes.button}>
+                      Create
+                    </Button>
+                  </Grid>
+                </Grid>
               </ListItem>
               <ListItem>
                 {loading ? (
@@ -131,33 +140,35 @@ const AdminOrders = () => {
                       <TableHead>
                         <TableRow>
                           <TableCell>ID</TableCell>
-                          <TableCell>DATE</TableCell>
-                          <TableCell>TOTAL</TableCell>
-                          <TableCell>PAID</TableCell>
-                          <TableCell>DELIVERED</TableCell>
-                          <TableCell>ACTION</TableCell>
+                          <TableCell>NAME</TableCell>
+                          <TableCell>PRICE</TableCell>
+                          <TableCell>CATEGORY</TableCell>
+                          <TableCell>COUNT</TableCell>
+                          <TableCell>RATING</TableCell>
+                          <TableCell>ACTIONS</TableCell>
                         </TableRow>
                       </TableHead>
                       <TableBody>
-                        {orders.map((order) => (
-                          <TableRow key={order._id}>
-                            <TableCell>{order._id}</TableCell>
-                            <TableCell>{order.createdAt}</TableCell>
-                            <TableCell>${order.totalPrice}</TableCell>
+                        {products.map((product) => (
+                          <TableRow key={product._id}>
+                            <TableCell>{product._id}</TableCell>
+                            <TableCell>{product.name}</TableCell>
+                            <TableCell>${product.price}</TableCell>
+                            <TableCell>{product.category}</TableCell>
+                            <TableCell>{product.countInStock}</TableCell>
+                            <TableCell>{product.rating}</TableCell>
                             <TableCell>
-                              {order.isPaid
-                                ? `paid at ${order.paidAt}`
-                                : 'not paid'}
-                            </TableCell>
-                            <TableCell>
-                              {order.isDelivered
-                                ? `paid at ${order.deliveredAt}`
-                                : 'not delivered'}
-                            </TableCell>
-                            <TableCell>
-                              <NextLink href={`/order/${order._id}`} passHref>
-                                <Button variant="contained">Details</Button>
-                              </NextLink>
+                              <NextLink
+                                href={`/admim/product/${product._id}`}
+                                passHref
+                              >
+                                <Button variant="contained" size="small">
+                                  Edit
+                                </Button>
+                              </NextLink>{' '}
+                              <Button variant="contained" size="small">
+                                Delete
+                              </Button>
                             </TableCell>
                           </TableRow>
                         ))}
@@ -174,4 +185,4 @@ const AdminOrders = () => {
   );
 };
 
-export default dynamic(() => Promise.resolve(AdminOrders), { ssr: false });
+export default dynamic(() => Promise.resolve(AdminProducts), { ssr: false });
