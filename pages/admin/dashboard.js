@@ -70,7 +70,7 @@ const AdminDashboard = () => {
     <Layout title="Admin Dashboard">
       <Grid container spacing={1}>
         <Grid item md={3} xs={12}>
-          <Card>
+          <Card className={classes.section}>
             <List>
               <NextLink href="/admin/dashboard" passHref>
                 <ListItem selected button component="a">
@@ -171,7 +171,7 @@ const AdminDashboard = () => {
                     datasets: [
                       {
                         label: 'Sales',
-                        backgroundColor: 'rgba(162, 222, 208, 1)',
+                        backgroundColor: 'rgba(177, 62, 14, 1)',
                         data: summary.salesData.map((x) => x.totalSales),
                       },
                     ],
