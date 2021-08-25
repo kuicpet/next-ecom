@@ -15,7 +15,7 @@ const signToken = (user) => {
   );
 };
 
-const isAuth = (req, res, next) => {
+const isAuth = async (req, res, next) => {
   const { authorization } = req.headers;
   if (authorization) {
     const token = authorization.slice(7, authorization.length);
@@ -32,4 +32,12 @@ const isAuth = (req, res, next) => {
   }
 };
 
-export { signToken, isAuth };
+const isAdmin = async (req,res,next) => {
+  if(req.user.isAdmin){
+    next()
+  } else {
+    res.status(401).send({message: 'user is not an admin'})
+  }
+}
+
+export { signToken, isAuth, isAdmin };
