@@ -159,7 +159,7 @@ const AdminProducts = () => {
                             <TableCell>{product.rating}</TableCell>
                             <TableCell>
                               <NextLink
-                                href={`/admim/product/${product._id}`}
+                                href={`/admin/product/${product._id}`}
                                 passHref
                               >
                                 <Button variant="contained" size="small">

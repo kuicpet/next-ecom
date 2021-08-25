@@ -51,6 +51,9 @@ const useStyles = makeStyles({
   fullWidth: {
     width: '100%',
   },
+  padding: {
+    padding: '0 1rem'
+  }
 });
 
 export default useStyles;

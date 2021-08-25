@@ -131,6 +131,7 @@ const AdminOrders = () => {
                       <TableHead>
                         <TableRow>
                           <TableCell>ID</TableCell>
+                          <TableCell>USER</TableCell>
                           <TableCell>DATE</TableCell>
                           <TableCell>TOTAL</TableCell>
                           <TableCell>PAID</TableCell>
@@ -142,6 +143,7 @@ const AdminOrders = () => {
                         {orders.map((order) => (
                           <TableRow key={order._id}>
                             <TableCell>{order._id}</TableCell>
+                            <TableCell>{order.user? order.user.name : 'Deleted user'}</TableCell>
                             <TableCell>{order.createdAt}</TableCell>
                             <TableCell>${order.totalPrice}</TableCell>
                             <TableCell>
