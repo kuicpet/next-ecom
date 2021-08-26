@@ -12,7 +12,10 @@ import {
   Button,
   Menu,
   MenuItem,
+  InputBase,
+  IconButton,
 } from '@material-ui/core';
+import SearchIcon from '@material-ui/icons/Search';
 import Head from 'next/head';
 import React, { useContext, useState } from 'react';
 import NextLink from 'next/link';
@@ -58,7 +61,16 @@ const Layout = ({ title, description, children }) => {
     Cookies.set('darkMode', newDarkMode ? 'ON' : 'OFF');
   };
   const [anchorEl, setAnchorEl] = useState(null);
+  const [query, setQuery] = useState('');
 
+  const queryChangeHandler = (e) => {
+    setQuery(e.target.value);
+  };
+
+  const submitHandler = (e) => {
+    e.preventDefault();
+    router.push(`/search?query=${query}`);
+  };
   const loginClickHandler = (e) => {
     setAnchorEl(e.currentTarget);
   };
@@ -94,6 +106,23 @@ const Layout = ({ title, description, children }) => {
               </Link>
             </NextLink>
             <div className={classes.grow}></div>
+            <div className={classes.searchSection}>
+              <form className={classes.searchForm} onSubmit={submitHandler}>
+                <InputBase
+                  name="query"
+                  className={classes.searchInput}
+                  placeholder="Search Products"
+                  onChange={queryChangeHandler}
+                />
+                <IconButton
+                  type='submit'
+                  className={classes.IconButton}
+                  aria-label='search'
+                >
+                  <SearchIcon />
+                </IconButton>
+              </form>
+            </div>
             <div>
               <Switch checked={darkMode} onChange={darkModeHandler}></Switch>
               <NextLink href="/cart" passHref>
@@ -133,15 +162,19 @@ const Layout = ({ title, description, children }) => {
                       Profile
                     </MenuItem>
                     <MenuItem
-                      onClick={(e) => loginMenuCloseHandler(e, '/order-history')}
+                      onClick={(e) =>
+                        loginMenuCloseHandler(e, '/order-history')
+                      }
                     >
                       Order History
                     </MenuItem>
                     {userInfo.isAdmin && (
                       <MenuItem
-                      onClick={(e) => loginMenuCloseHandler(e, '/admin/dashboard')}
+                        onClick={(e) =>
+                          loginMenuCloseHandler(e, '/admin/dashboard')
+                        }
                       >
-                      Admin Dashboard
+                        Admin Dashboard
                       </MenuItem>
                     )}
                     <MenuItem onClick={logoutClickHandler}>Logout</MenuItem>
