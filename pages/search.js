@@ -9,15 +9,17 @@ import {
   Button,
 } from '@material-ui/core';
 import { Pagination, Rating } from '@material-ui/lab';
-import React from 'react';
+import React, { useContext } from 'react';
 import CancelIcon from '@material-ui/icons/Cancel';
-import Layout from './components/Layout';
-import db from './utils/db';
-import Product from './models/Products';
-import useStyles from './utils/styles';
+import Layout from '../components/Layout';
+import db from '../utils/db';
+import Product from '../models/Products';
+import useStyles from '../utils/styles';
 import { useRouter } from 'next/router';
-import { Store } from './utils/Store';
-import ProductItem from './components/ProductItem';
+import { Store } from '../utils/Store';
+import ProductItem from '../components/ProductItem';
+import { useSnackbar } from 'notistack';
+import axios from 'axios';
 
 const PAGE_SIZE = 3;
 const prices = [
@@ -27,11 +29,11 @@ const prices = [
   },
   {
     name: '$51 - $200',
-    value: '1 - 50',
+    value: '51 - 200',
   },
   {
     name: '$201 - $1000',
-    value: '1 - 50',
+    value: '201 - 1000',
   },
 ];
 
@@ -40,6 +42,19 @@ const ratings = [1, 2, 3, 4, 5];
 const Search = (props) => {
   const router = useRouter();
   const { state, dispatch } = useContext(Store);
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+  const addToCartHandler = async (product) => {
+    closeSnackbar();
+    const existItem = state.cart.cartItems.find((x) => x._id === product._id);
+    const qty = existItem ? existItem.qty + 1 : 1;
+    const { data } = await axios.get(`/api/products/${product._id}`);
+    if (data.countInStock < qty) {
+      enqueueSnackbar('Sorry, Product is Out of Stock', { variant: 'error' });
+      return;
+    }
+    dispatch({ type: 'CART_ADD_ITEM', payload: { ...product, qty } });
+    router.push('/cart');
+  };
   const {
     query = 'all',
     category = 'all',
@@ -95,11 +110,11 @@ const Search = (props) => {
     filterSearch({ rating: e.target.value });
   };
   const classes = useStyles();
-  const pageHandler = () => {};
+
   return (
     <Layout title="Search">
       <Grid container spacing={1}>
-        <Grid item md={3}>
+        <Grid item md={3} xs={12}>
           <List>
             <ListItem>
               <Box className={classes.fullWidth}>
@@ -178,8 +193,8 @@ const Search = (props) => {
               ) : null}
             </Grid>
             <Grid item>
-              <Typography>Sort by</Typography>
-              <Select  value={sort} onChange={sortHandler}>
+              <Typography className={classes.sort} component='span'>Sort by</Typography>
+              <Select value={sort} onChange={sortHandler}>
                 <MenuItem>Featured</MenuItem>
                 <MenuItem>Price: Low to High</MenuItem>
                 <MenuItem>Price: High to low</MenuItem>
@@ -188,15 +203,15 @@ const Search = (props) => {
               </Select>
             </Grid>
           </Grid>
-          <Grid container>
-              {products.map((product) => (
-                  <Grid item md={4} key={product.name}>
-                      <ProductItem 
-                        product={product}
-                        addToCartHandler={addToCartHandler}
-                      />
-                  </Grid>
-              ))}
+          <Grid container spacing={3} className={classes.mt1}>
+            {products.map((product) => (
+              <Grid item md={4} key={product.name}>
+                <ProductItem
+                  product={product}
+                  addToCartHandler={addToCartHandler}
+                />
+              </Grid>
+            ))}
           </Grid>
           <Pagination
             className={classes.mt1}
@@ -220,7 +235,6 @@ export async function getServerSideProps({ query }) {
   const rating = query.rating || '';
   const sort = query.sort || '';
   const searchQuery = query.query || '';
-  const category = query.category || '';
 
   const queryFilter =
     searchQuery && searchQuery !== 'all'
