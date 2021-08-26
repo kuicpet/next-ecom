@@ -159,7 +159,7 @@ const AdminUsers = () => {
                             <TableCell>{user.isAdmin ? 'yes' : 'no'}</TableCell>
                             <TableCell>
                               <NextLink
-                                href={`/admim/product/${user._id}`}
+                                href={`/admin/user/${user._id}`}
                                 passHref
                               >
                                 <Button variant="contained" size="small">
