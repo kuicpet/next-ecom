@@ -86,7 +86,7 @@ const AdminUsers = () => {
       error: '',
       users: [],
     });
-    const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   useEffect(() => {
     if (!userInfo) {
       router.push('/login');
@@ -168,15 +168,6 @@ const AdminUsers = () => {
                       Users
                     </Typography>
                   </Grid>
-                  <Grid item align="right" xs={6}>
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      className={classes.button}
-                    >
-                      Create
-                    </Button>
-                  </Grid>
                 </Grid>
               </ListItem>
               <ListItem>
@@ -219,7 +210,7 @@ const AdminUsers = () => {
                               >
                                 Delete
                               </Button>
-                              {loadingDelete && <CircularProgress/>}
+                              {loadingDelete && <CircularProgress />}
                             </TableCell>
                           </TableRow>
                         ))}
