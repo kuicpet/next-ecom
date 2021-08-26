@@ -23,6 +23,7 @@ import Layout from '../../components/Layout';
 import { getError } from '../../utils/error';
 import { Store } from '../../utils/Store';
 import useStyles from '../../utils/styles';
+import { useSnackbar } from 'notistack';
 
 function reducer(state, action) {
   switch (action.type) {
@@ -46,7 +47,28 @@ function reducer(state, action) {
         loading: false,
         error: action.payload,
       };
-
+    case 'DELETE_REQUEST':
+      return {
+        ...state,
+        loadingDelete: true,
+      };
+    case 'DELETE_SUCCESS':
+      return {
+        ...state,
+        loadingDelete: false,
+        successDelete: true,
+      };
+    case 'DELETE_FAIL':
+      return {
+        ...state,
+        loadingDelete: false,
+      };
+    case 'DELETE_RESET':
+      return {
+        ...state,
+        loadingDelete: false,
+        successDelete: false,
+      };
     default:
       state;
       break;
@@ -58,11 +80,13 @@ const AdminUsers = () => {
   const classes = useStyles();
   const { state } = useContext(Store);
   const { userInfo } = state;
-  const [{ loading, error, users }, dispatch] = useReducer(reducer, {
-    loading: true,
-    error: '',
-    users: [],
-  });
+  const [{ loading, error, users, loadingDelete, successDelete }, dispatch] =
+    useReducer(reducer, {
+      loading: true,
+      error: '',
+      users: [],
+    });
+    const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   useEffect(() => {
     if (!userInfo) {
       router.push('/login');
@@ -81,8 +105,30 @@ const AdminUsers = () => {
         dispatch({ type: 'FETCH_ERROR', payload: getError(error) });
       }
     };
-    fetchUsers();
-  }, []);
+    if (successDelete) {
+      dispatch({ type: 'DELETE_SUCCESS' });
+    } else {
+      fetchUsers();
+    }
+  }, [successDelete, router, userInfo]);
+  const deleteHandler = async (userId) => {
+    if (!window.confirm('Are you sure')) {
+      return;
+    }
+    try {
+      dispatch({ type: 'DELETE_REQUEST' });
+      await axios.delete(`/api/admin/users/${userId}`, {
+        headers: {
+          authorization: `Bearer ${userInfo.token}`,
+        },
+      });
+      dispatch({ type: 'DELETE_SUCCESS' });
+      enqueueSnackbar('User deleted successfully', { variant: 'success' });
+    } catch (error) {
+      dispatch({ type: 'DELETE_FAIL' });
+      enqueueSnackbar(getError(error), { variant: 'error' });
+    }
+  };
   return (
     <Layout title="Users">
       <Grid container spacing={1}>
@@ -166,9 +212,14 @@ const AdminUsers = () => {
                                   Edit
                                 </Button>
                               </NextLink>{' '}
-                              <Button variant="contained" size="small">
+                              <Button
+                                variant="contained"
+                                size="small"
+                                onClick={() => deleteHandler(user._id)}
+                              >
                                 Delete
                               </Button>
+                              {loadingDelete && <CircularProgress/>}
                             </TableCell>
                           </TableRow>
                         ))}

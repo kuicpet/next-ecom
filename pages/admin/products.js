@@ -101,7 +101,10 @@ const AdminProducts = () => {
   const classes = useStyles();
   const { state } = useContext(Store);
   const { userInfo } = state;
-  const [{ loading, error, products, loadingDelete, successDelete, loadingCreate }, dispatch] = useReducer(reducer, {
+  const [
+    { loading, error, products, loadingDelete, successDelete, loadingCreate },
+    dispatch,
+  ] = useReducer(reducer, {
     loading: true,
     error: '',
     products: [],
@@ -125,22 +128,30 @@ const AdminProducts = () => {
         dispatch({ type: 'FETCH_FAIL', payload: getError(error) });
       }
     };
-    fetchProducts();
-  }, []);
+    if (successDelete) {
+      dispatch({ type: 'DELETE_RESET' });
+    } else {
+      fetchProducts();
+    }
+  }, [successDelete]);
   const createProductHandler = async () => {
     if (!window.confirm('Are you sure')) {
       return;
     }
     try {
       dispatch({ type: 'CREATE_REQUEST' });
-      const { data } = await axios.post('/api/admin/products',{}, {
-        headers: {
-          authorization: `Bearer ${userInfo.token}`,
-        },
-      });
+      const { data } = await axios.post(
+        '/api/admin/products',
+        {},
+        {
+          headers: {
+            authorization: `Bearer ${userInfo.token}`,
+          },
+        }
+      );
       dispatch({ type: 'CREATE_SUCCESS' });
-      enqueueSnackbar('Product created successfully', {variant: 'success'})
-      router.push(`/admin/product/${data.product._id}`)
+      enqueueSnackbar('Product created successfully', { variant: 'success' });
+      router.push(`/admin/product/${data.product._id}`);
     } catch (error) {
       dispatch({ type: 'CREATE_FAIL' });
       enqueueSnackbar(getError(error), { variant: 'error' });

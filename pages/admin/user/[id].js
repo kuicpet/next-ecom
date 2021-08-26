@@ -89,7 +89,7 @@ const UserEdit = ({ params }) => {
       };
       fetchData();
     }
-  }, []);
+  }, [userInfo, userId, router]);
 
   const submitHandler = async ({ name }) => {
     closeSnackbar();
