@@ -105,6 +105,16 @@ const useStyles = makeStyles((theme) => ({
       width: 250,
     },
   },
+  // review
+  reviewForm: {
+    maxWidth: 800,
+    width: '100%',
+  },
+  reviewItem: {
+    marginRight: '1rem',
+    borderRight: '1px #808080 solid',
+    paddingRight: '1rem',
+  },
 }));
 
 export default useStyles;

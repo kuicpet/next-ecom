@@ -24,7 +24,17 @@ const productSchema = new mongoose.Schema(
     countInStock: { type: Number, required: true, default: 0 },
     rating: { type: Number, required: true, default: 0 },
     numReviews: { type: Number, required: true, default: 0 },
-    reviews: [reviewSchema],
+    reviews: [
+      {
+        user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+        name: { type: String, required: true },
+        rating: { type: Number, default: 0 },
+        comment: { type: String, required: true },
+      },
+      {
+        timestamps: true,
+      }
+    ],
     featuredImage: { type: String },
     isFeatured: { type: Boolean, required: true, default: false },
   },

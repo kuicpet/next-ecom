@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import NextLink from 'next/link';
 import Image from 'next/image';
 import {
@@ -10,6 +10,8 @@ import {
   Typography,
   Card,
   Button,
+  TextField,
+  CircularProgress,
 } from '@material-ui/core';
 import Layout from '../../components/Layout';
 //import data from '../../utils/data';
@@ -19,15 +21,59 @@ import Product from '../../models/Products';
 import axios from 'axios';
 import { Store } from '../../utils/Store';
 import { useSnackbar } from 'notistack';
+import { getError } from '../../utils/error';
+import { Rating } from '@material-ui/lab';
+
 
 const ProductPage = (props) => {
+ 
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const { state, dispatch } = useContext(Store);
+  const { userInfo } = state;
   const { product } = props;
   const classes = useStyles();
   const router = useRouter();
-  // const { slug } = router.query;
-  // const product = data.products.find((a) => a.slug === slug);
+  const [reviews, setReviews] = useState([]);
+  const [rating, setRating] = useState(0);
+  const [comment, setComment] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const submitHandler = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      await axios.post(
+        `/api/products/${product._id}/reviews`,
+        {
+          rating,
+          comment,
+        },
+        {
+          headers: {
+            authorization: `Bearer ${userInfo.token}`,
+          },
+        }
+      );
+      setLoading(false);
+      enqueueSnackbar('Review submitted succesfully', { variant: 'success' });
+      fetchReviews();
+    } catch (error) {
+      setLoading(false);
+      enqueueSnackbar(getError(error), { variant: 'error' });
+    }
+  };
+
+  const fetchReviews = async () => {
+    try {
+      const { data } = await axios.get(`/api/products/${product._id}/reviews`);
+      setReviews(data);
+    } catch (error) {
+      enqueueSnackbar(getError(error), { variant: 'error' });
+    }
+  };
+  useEffect(() => {
+    fetchReviews();
+  }, []);
   if (!product) {
     return <div>Product not Found</div>;
   }
@@ -38,7 +84,7 @@ const ProductPage = (props) => {
     const qty = existItem ? existItem.qty + 1 : 1;
     const { data } = await axios.get(`/api/products/${product._id}`);
     if (data.countInStock < qty) {
-      enqueueSnackbar('Sorry, Product out of Stock', {variant: 'error'})
+      enqueueSnackbar('Sorry, Product out of Stock', { variant: 'error' });
       return;
     }
     dispatch({ type: 'CART_ADD_ITEM', payload: { ...product, qty } });
@@ -126,6 +172,109 @@ const ProductPage = (props) => {
           </Card>
         </Grid>
       </Grid>
+      <List>
+        <ListItem>
+          <Typography variant="h2">Customer Reviews</Typography>
+        </ListItem>
+        {reviews.length === 0 && (
+          <ListItem>
+            <Typography>No review</Typography>
+          </ListItem>
+        )}
+        {reviews.map((review) => (
+          <ListItem key={review._id}>
+            <Grid container>
+              <Grid item className={classes.reviewItem}>
+                <Typography>
+                  <strong>{review.name}</strong>
+                </Typography>
+                <Typography>{review.createdAt}</Typography>
+              </Grid>
+              <Grid item>
+                <Rating value={review.rating} readOnly />
+                <Typography>{review.comment}</Typography>
+              </Grid>
+            </Grid>
+          </ListItem>
+        ))}
+        <ListItem>
+          {userInfo ? (
+            <form onSubmit={submitHandler} className={classes.reviewForm} >
+              <List>
+                <ListItem>
+                  <Typography variant="h1">Leave your Review</Typography>
+                </ListItem>
+                {/*<ListItem>
+                  <Controller
+                    name="comment"
+                    control={control}
+                    defaultValue=""
+                    rules={{
+                      required: true,
+                      minLength: 5,
+                    }}
+                    render={({ field }) => (
+                      <TextField
+                        id="comment"
+                        fullWidth
+                        variant="outlined"
+                        label="Enter comment"
+                        error={Boolean(errors.comment)}
+                        helperText={
+                          errors.comment
+                            ? errors.comment.type === 'minLength'
+                              ? 'Comment is too short'
+                              : 'Comment is required'
+                            : ''
+                        }
+                        {...field}
+                      ></TextField>
+                    )}
+                  ></Controller>
+                      </ListItem>*/}
+                <ListItem>
+                  <TextField
+                    multiline
+                    variant="outlined"
+                    fullWidth
+                    name="review"
+                    label="Enter comment"
+                    value={comment}
+                    onChange={(e) => setComment(e.target.value)}
+                  />
+                </ListItem>
+                <ListItem>
+                  <Rating
+                    name="simple-controlled"
+                    value={rating}
+                    onChange={(e) => setRating(e.target.value)}
+                  />
+                </ListItem>
+                <ListItem>
+                  <Button
+                    type="submit"
+                    fullWidth
+                    variant="contained"
+                    color="primary"
+                    className={classes.button}
+                  >
+                    Submit
+                  </Button>
+                  {loading && <CircularProgress />}
+                </ListItem>
+              </List>
+            </form>
+          ) : (
+            <Typography>
+              Please{' '}
+              <Link href={`/login?redirect=/product/${product.slug}`}>
+                Login
+              </Link>{' '}
+              to write a review
+            </Typography>
+          )}
+        </ListItem>
+      </List>
     </Layout>
   );
 };
@@ -134,7 +283,8 @@ export async function getServerSideProps(context) {
   const { params } = context;
   const { slug } = params;
   db.connect();
-  const product = await Product.findOne({ slug }).lean();
+  const product = await Product.findOne({ slug }, '-reviews').lean();
+  
   db.disconnect();
   return {
     props: {
