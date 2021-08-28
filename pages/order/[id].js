@@ -221,14 +221,18 @@ const Order = ({ params }) => {
   };
   const deliverOrderHandler = async () => {
     try {
-      dispatch({type: 'DELIVER_REQUEST'})
-      const {data} = await axios.put(`/api/orders/${order._id}/deliver`, {}, {
-        headers: {
-          authorization: `Bearer ${userInfo.token}`,
-        },
-      })
-      dispatch({type: 'DELIVER_SUCCESS', payload: data})
-      enqueueSnackbar('Order is delivered', {variant: 'success'})
+      dispatch({ type: 'DELIVER_REQUEST' });
+      const { data } = await axios.put(
+        `/api/orders/${order._id}/deliver`,
+        {},
+        {
+          headers: {
+            authorization: `Bearer ${userInfo.token}`,
+          },
+        }
+      );
+      dispatch({ type: 'DELIVER_SUCCESS', payload: data });
+      enqueueSnackbar('Order is delivered', { variant: 'success' });
     } catch (error) {
       dispatch({ type: 'DELIVER_FAIL', payload: getError(error) });
       enqueueSnackbar(getError(error), { variant: 'error' });
@@ -258,6 +262,16 @@ const Order = ({ params }) => {
                     {shippingAddress.fullName},{shippingAddress.address},{' '}
                     {shippingAddress.city}, {shippingAddress.postalCode},{' '}
                     {shippingAddress.country}
+                    &nbsp;
+                    {shippingAddress.location && (
+                      <Link
+                        variant="button"
+                        target="_new"
+                        href={`https://maps.google.com?q=${shippingAddress.location.lat},${shippingAddress.location.lng}`}
+                      >
+                        Show On Map
+                      </Link>
+                    )}
                   </Typography>
                 </ListItem>
                 <ListItem>
@@ -409,12 +423,12 @@ const Order = ({ params }) => {
                     )}
                   </ListItem>
                 )}
-                {userInfo.isAdmin && order.isPaid && !order.isDelivered && (
+                {userInfo.isAdmin && !order.isPaid && !order.isDelivered && (
                   <ListItem>
-                    {loadingDeliver && <CircularProgress/>}
+                    {loadingDeliver && <CircularProgress />}
                     <Button
-                      variant='contained'
-                      color='primary'
+                      variant="contained"
+                      color="primary"
                       className={classes.button}
                       onClick={deliverOrderHandler}
                     >

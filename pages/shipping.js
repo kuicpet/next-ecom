@@ -21,15 +21,17 @@ const Shipping = () => {
     control,
     formState: { errors },
     setValue,
+    getValues,
   } = useForm();
-  
-  const  router  = useRouter();
+
+  const router = useRouter();
   const classes = useStyles();
   const { state, dispatch } = useContext(Store);
   const {
     userInfo,
     cart: { shippingAddress },
   } = state;
+  const { location } = shippingAddress;
   useEffect(() => {
     if (!userInfo) {
       router.push('/login?redirect=/shipping');
@@ -54,6 +56,29 @@ const Shipping = () => {
   }) => {
     dispatch({
       type: 'SAVE_SHIPPING_ADDRESS',
+      payload: { fullName, address, city, postalCode, country, location },
+    });
+    Cookies.set(
+      'shippingAddress',
+      JSON.stringify({
+        fullName,
+        address,
+        city,
+        postalCode,
+        country,
+        location,
+      })
+    );
+    router.push('/payment');
+  };
+  const chooseLocationHandler = () => {
+    const fullName = getValues('fullName');
+    const address = getValues('address');
+    const city = getValues('city');
+    const postalCode = getValues('postalCode');
+    const country = getValues('country');
+    dispatch({
+      type: 'SAVE_SHIPPING_ADDRESS',
       payload: { fullName, address, city, postalCode, country },
     });
     Cookies.set(
@@ -64,9 +89,10 @@ const Shipping = () => {
         city,
         postalCode,
         country,
+        location,
       })
     );
-    router.push('/payment');
+    router.push('/map');
   };
   return (
     <Layout title="Shipping Address">
@@ -220,7 +246,16 @@ const Shipping = () => {
               )}
             ></Controller>
           </ListItem>
-
+          <ListItem>
+            <Button
+              variant="contained"
+              type="button"
+              onClick={chooseLocationHandler}
+            >
+              Choose on map
+            </Button>
+            
+          </ListItem>
           <ListItem>
             <Button
               variant="contained"

@@ -28,7 +28,7 @@ const Profile = () => {
   const {
     handleSubmit,
     control,
-    setValue, 
+    setValue,
     formState: { errors },
   } = useForm();
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
@@ -36,11 +36,10 @@ const Profile = () => {
 
   useEffect(() => {
     if (!userInfo) {
-     return router.push('/login');
+      return router.push('/login');
     }
-    setValue('name', userInfo.name)
-    setValue('email', userInfo.email)
-    
+    setValue('name', userInfo.name);
+    setValue('email', userInfo.email);
   }, []);
   const submitHandler = async ({ name, email, password, confirmPassword }) => {
     closeSnackbar();
@@ -49,15 +48,19 @@ const Profile = () => {
       return;
     }
     try {
-      const { data } = await axios.put('/api/users/profile', {
-        name,
-        email,
-        password,
-      },{
-        headers: {
+      const { data } = await axios.put(
+        '/api/users/profile',
+        {
+          name,
+          email,
+          password,
+        },
+        {
+          headers: {
             authorization: `Bearer ${userInfo.token}`,
           },
-      });
+        }
+      );
       dispatch({ type: 'USER_LOGIN', payload: data });
       // console.log(data);
       Cookies.set('userInfo', JSON.stringify(data));
@@ -72,16 +75,26 @@ const Profile = () => {
         <Grid item md={3} xs={12}>
           <Card className={classes.section}>
             <List>
-              <NextLink href="/profile" passHref>
-                <ListItem selected button component="a">
-                  <ListItemText primary="User Profile"></ListItemText>
-                </ListItem>
-              </NextLink>
-              <NextLink href="/order-history" passHref>
-                <ListItem button component="a">
-                  <ListItemText primary="Order History"></ListItemText>
-                </ListItem>
-              </NextLink>
+              {userInfo.isAdmin ? (
+                <NextLink href="/profile" passHref>
+                  <ListItem selected button component="a">
+                    <ListItemText primary="User Profile"></ListItemText>
+                  </ListItem>
+                </NextLink>
+              ) : (
+                <>
+                  <NextLink href="/profile" passHref>
+                    <ListItem selected button component="a">
+                      <ListItemText primary="User Profile"></ListItemText>
+                    </ListItem>
+                  </NextLink>
+                  <NextLink href="/order-history" passHref>
+                    <ListItem button component="a">
+                      <ListItemText primary="Order History"></ListItemText>
+                    </ListItem>
+                  </NextLink>
+                </>
+              )}
             </List>
           </Card>
         </Grid>
@@ -192,11 +205,11 @@ const Profile = () => {
                         control={control}
                         defaultValue=""
                         rules={{
-                            validate: (value) =>
-                              value === '' ||
-                              value.length > 5 ||
-                              'Confirm Password length is more than 5',
-                          }}
+                          validate: (value) =>
+                            value === '' ||
+                            value.length > 5 ||
+                            'Confirm Password length is more than 5',
+                        }}
                         render={({ field }) => (
                           <TextField
                             id="confirmPassword"
