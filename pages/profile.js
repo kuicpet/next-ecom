@@ -78,7 +78,7 @@ const Profile = () => {
               {userInfo.isAdmin ? (
                 <NextLink href="/profile" passHref>
                   <ListItem selected button component="a">
-                    <ListItemText primary="User Profile"></ListItemText>
+                    <ListItemText primary="Admin Profile"></ListItemText>
                   </ListItem>
                 </NextLink>
               ) : (

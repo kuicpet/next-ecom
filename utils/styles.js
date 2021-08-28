@@ -57,6 +57,9 @@ const useStyles = makeStyles((theme) => ({
   mt1: {
     marginTop: '1rem'
   },
+  top: {
+    top: '3rem !important'
+  },
    // search
    searchSection: {
     display: 'none',

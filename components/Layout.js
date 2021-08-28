@@ -155,6 +155,7 @@ const Layout = ({ title, description, children }) => {
                     keepMounted
                     open={Boolean(anchorEl)}
                     onClose={loginMenuCloseHandler}
+                    className={classes.top}
                   >
                     <MenuItem
                       onClick={(e) => loginMenuCloseHandler(e, '/profile')}
