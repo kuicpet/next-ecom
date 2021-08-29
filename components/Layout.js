@@ -162,13 +162,13 @@ const Layout = ({ title, description, children }) => {
                     >
                       Profile
                     </MenuItem>
-                    {/*<MenuItem
+                    <MenuItem
                       onClick={(e) =>
                         loginMenuCloseHandler(e, '/order-history')
                       }
                     >
                       Order History
-                    </MenuItem>*/}
+                    </MenuItem>
                     {userInfo.isAdmin && (
                       <MenuItem
                         onClick={(e) =>

@@ -19,6 +19,7 @@ import {
 import React, { useContext } from 'react';
 import dynamic from 'next/dynamic';
 import NextLink from 'next/link';
+import CancelIcon from '@material-ui/icons/Cancel';
 import Layout from '../components/Layout';
 import { Store } from '../utils/Store';
 import useStyles from '../utils/styles';
@@ -56,12 +57,12 @@ const CartPage = () => {
         Shopping Cart
       </Typography>
       {cartItems.length === 0 ? (
-        <div>
-          Cart is Empty.
+        <Typography>
+          You currently have no Items in your cart .
           <NextLink href="/" passHref>
             <Link>Go shopping</Link>
           </NextLink>
-        </div>
+        </Typography>
       ) : (
         <Grid container spacing={1}>
           <Grid item md={9} xs={12}>
@@ -120,7 +121,7 @@ const CartPage = () => {
                           color="secondary"
                           onClick={() => removeItemHandler(item)}
                         >
-                          x
+                          X
                         </Button>
                       </TableCell>
                     </TableRow>

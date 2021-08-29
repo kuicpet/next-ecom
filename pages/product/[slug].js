@@ -24,9 +24,7 @@ import { useSnackbar } from 'notistack';
 import { getError } from '../../utils/error';
 import { Rating } from '@material-ui/lab';
 
-
 const ProductPage = (props) => {
- 
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const { state, dispatch } = useContext(Store);
   const { userInfo } = state;
@@ -122,9 +120,10 @@ const ProductPage = (props) => {
               <Typography>Brand: {product.brand}</Typography>
             </ListItem>
             <ListItem>
-              <Typography>
-                Ratings: {product.rating} stars ({product.numReviews}) reviews
-              </Typography>
+              <Rating value={product.rating} readOnly />
+            </ListItem>
+            <ListItem>
+              <Typography>Reviews: ({product.numReviews}) reviews</Typography>
             </ListItem>
             <ListItem>
               <Typography>Description: {product.description}</Typography>
@@ -151,7 +150,7 @@ const ProductPage = (props) => {
                   </Grid>
                   <Grid item xs={6}>
                     <Typography>
-                      {product.countInStock > 0 ? 'In Stock' : 'Unavailable'}
+                      {product.countInStock > 0 ? 'In Stock' : 'Out of Stock'}
                     </Typography>
                   </Grid>
                 </Grid>
@@ -199,7 +198,7 @@ const ProductPage = (props) => {
         ))}
         <ListItem>
           {userInfo ? (
-            <form onSubmit={submitHandler} className={classes.reviewForm} >
+            <form onSubmit={submitHandler} className={classes.reviewForm}>
               <List>
                 <ListItem>
                   <Typography variant="h1">Leave your Review</Typography>
@@ -284,7 +283,7 @@ export async function getServerSideProps(context) {
   const { slug } = params;
   db.connect();
   const product = await Product.findOne({ slug }, '-reviews').lean();
-  
+
   db.disconnect();
   return {
     props: {

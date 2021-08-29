@@ -9,6 +9,7 @@ import {
 } from '@material-ui/core';
 import NextLink from 'next/link';
 import React from 'react';
+import Rating from '@material-ui/lab/Rating'
 
 const ProductItem = ({ product, addToCartHandler }) => {
   return (
@@ -22,6 +23,7 @@ const ProductItem = ({ product, addToCartHandler }) => {
           ></CardMedia>
           <CardContent>
             <Typography>{product.name}</Typography>
+            <Rating  value={product.rating} readOnly/>
           </CardContent>
         </CardActionArea>
       </NextLink>

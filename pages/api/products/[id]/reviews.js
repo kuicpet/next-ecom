@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 import nextConnect from 'next-connect';
 import { onError } from '../../../../utils/error';
 import db from '../../../../utils/db';
-import Product from '../../../../models/Product';
+import Product from '../../../../models/Products';
 import { isAuth } from '../../../../utils/auth';
 
 const handler = nextConnect({
