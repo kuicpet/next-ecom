@@ -9,15 +9,13 @@ import {
   TableCell,
   TableBody,
   Link,
-  Select,
-  MenuItem,
   Button,
   List,
   ListItem,
   Card,
   CircularProgress,
 } from '@material-ui/core';
-import React, { useContext, useEffect, useReducer, useState } from 'react';
+import React, { useContext, useEffect, useReducer } from 'react';
 import dynamic from 'next/dynamic';
 import NextLink from 'next/link';
 import Layout from '../../components/Layout';
@@ -26,7 +24,7 @@ import useStyles from '../../utils/styles';
 import axios from 'axios';
 import { useRouter } from 'next/router';
 import { useSnackbar } from 'notistack';
-import { getError, onError } from '../../utils/error';
+import { getError } from '../../utils/error';
 import { PayPalButtons, usePayPalScriptReducer } from '@paypal/react-paypal-js';
 
 function reducer(state, action) {
@@ -181,7 +179,15 @@ const Order = ({ params }) => {
       };
       loadPaypalScript();
     }
-  }, [orderId, successPay, successDeliver]);
+  }, [
+    orderId,
+    successPay,
+    successDeliver,
+    order._id,
+    userInfo,
+    router,
+    paypalDispatch,
+  ]);
   const createOrder = (data, actions) => {
     return actions.order
       .create({

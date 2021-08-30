@@ -9,8 +9,6 @@ import {
   TableCell,
   TableBody,
   Link,
-  Select,
-  MenuItem,
   Button,
   List,
   ListItem,
@@ -54,7 +52,7 @@ const PlaceOrder = () => {
     if(cartItems.length === 0){
       router.push('/cart')
     }
-  }, []);
+  }, [paymentMethod, cartItems, router]);
 
   const placeOrderHandler = async (e) => {
     closeSnackbar();
@@ -68,7 +66,6 @@ const PlaceOrder = () => {
           shippingAddress,
           paymentMethod,
           itemsPrice,
-          shippingAddress,
           taxPrice,
           totalPrice,
         },

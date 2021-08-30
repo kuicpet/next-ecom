@@ -1,22 +1,11 @@
-import {
-  Grid,
-  Card,
-  CardActionArea,
-  CardMedia,
-  CardContent,
-  Typography,
-  CardActions,
-  Button,
-} from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 import axios from 'axios';
-import NextLink from 'next/link';
 import { useRouter } from 'next/router';
 import { useSnackbar } from 'notistack';
 import { useContext } from 'react';
 import Layout from '../components/Layout';
 import ProductItem from '../components/ProductItem';
 import Product from '../models/Products';
-import data from '../utils/data';
 import db from '../utils/db';
 import { Store } from '../utils/Store';
 
@@ -31,7 +20,7 @@ export default function Home(props) {
     const qty = existItem ? existItem.qty + 1 : 1;
     const { data } = await axios.get(`/api/products/${product._id}`);
     if (data.countInStock < qty) {
-      enqueueSnackbar('Sorry, Product is Out of Stock', {variant: 'error'});
+      enqueueSnackbar('Sorry, Product is Out of Stock', { variant: 'error' });
       return;
     }
     dispatch({ type: 'CART_ADD_ITEM', payload: { ...product, qty } });
@@ -44,9 +33,10 @@ export default function Home(props) {
         <Grid container spacing={3}>
           {products.map((product) => (
             <Grid item md={4} key={product.name}>
-              <ProductItem 
-              product={product}
-              addToCartHandler={addToCartHandler} />
+              <ProductItem
+                product={product}
+                addToCartHandler={addToCartHandler}
+              />
             </Grid>
           ))}
         </Grid>

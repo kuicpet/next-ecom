@@ -97,7 +97,7 @@ const ProductEdit = ({ params }) => {
       };
       fetchData()
     }
-  }, [productId]);
+  }, [productId, userInfo, enqueueSnackbar, router, setValue]);
   const uploadHandler = async(e, imageField = 'image') => {
     e.preventDefault();
     const file = e.target.files[0];

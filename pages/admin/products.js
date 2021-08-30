@@ -109,7 +109,7 @@ const AdminProducts = () => {
     error: '',
     products: [],
   });
-  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+  const { enqueueSnackbar } = useSnackbar();
   useEffect(() => {
     if (!userInfo) {
       router.push('/login');
@@ -133,7 +133,7 @@ const AdminProducts = () => {
     } else {
       fetchProducts();
     }
-  }, [successDelete]);
+  }, [successDelete,userInfo, router]);
   const createProductHandler = async () => {
     if (!window.confirm('Are you sure')) {
       return;
@@ -213,6 +213,7 @@ const AdminProducts = () => {
                     <Typography component="h1" variant="h1">
                       Products
                     </Typography>
+                    {loadingDelete && <CircularProgress/>}
                   </Grid>
                   <Grid item align="right" xs={6}>
                     <Button
@@ -223,6 +224,7 @@ const AdminProducts = () => {
                     >
                       Create
                     </Button>
+                    {loadingCreate && <CircularProgress/>}
                   </Grid>
                 </Grid>
               </ListItem>

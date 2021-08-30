@@ -64,7 +64,7 @@ const AdminDashboard = () => {
       }
     };
     fetchData();
-  }, []);
+  }, [router, userInfo]);
 
   return (
     <Layout title="Admin Dashboard">

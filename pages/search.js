@@ -84,7 +84,8 @@ const Search = (props) => {
     if (sort) query.sort = sort;
     if (price) query.price = price;
     if (rating) query.rating = rating;
-    if (min) query.page = page;
+    if (min) query.min ? query.min : query.min === 0 ? 0 : min;
+    if (max) query.max ? query.max : query.max === 0 ? 0 : max;
 
     router.push({
       pathname: path,

@@ -11,7 +11,7 @@ import {
 import axios from 'axios';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
-import React, { useContext, useEffect, useReducer } from 'react';
+import React, { useContext, useEffect } from 'react';
 import NextLink from 'next/link';
 import Layout from '../components/Layout';
 import { getError } from '../utils/error';
@@ -40,7 +40,7 @@ const Profile = () => {
     }
     setValue('name', userInfo.name);
     setValue('email', userInfo.email);
-  }, []);
+  }, [router, userInfo, setValue]);
   const submitHandler = async ({ name, email, password, confirmPassword }) => {
     closeSnackbar();
     if (password !== confirmPassword) {

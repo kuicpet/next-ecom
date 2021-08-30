@@ -19,7 +19,6 @@ import {
 import React, { useContext } from 'react';
 import dynamic from 'next/dynamic';
 import NextLink from 'next/link';
-import CancelIcon from '@material-ui/icons/Cancel';
 import Layout from '../components/Layout';
 import { Store } from '../utils/Store';
 import useStyles from '../utils/styles';

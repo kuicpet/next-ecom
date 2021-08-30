@@ -71,7 +71,7 @@ const ProductPage = (props) => {
   };
   useEffect(() => {
     fetchReviews();
-  }, []);
+  });
   if (!product) {
     return <div>Product not Found</div>;
   }

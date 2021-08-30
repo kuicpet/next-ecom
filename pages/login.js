@@ -33,7 +33,7 @@ const Login = () => {
     if (userInfo) {
       router.push('/');
     }
-  }, []);
+  }, [router, userInfo]);
   // const [email, setEmail] = useState('');
   // const [password, setPassword] = useState('');
   const classes = useStyles();
@@ -130,7 +130,7 @@ const Login = () => {
             </Button>
           </ListItem>
           <ListItem>
-            Don't have an Account? &nbsp;{' '}
+            Don&apos;t have an Account? &nbsp;{' '}
             <NextLink href={`/register?redirect=${redirect || '/'}`} passHref>
               <Link>Register</Link>
             </NextLink>

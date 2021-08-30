@@ -86,7 +86,7 @@ const AdminUsers = () => {
       error: '',
       users: [],
     });
-  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+  const { enqueueSnackbar } = useSnackbar();
   useEffect(() => {
     if (!userInfo) {
       router.push('/login');

@@ -4,7 +4,6 @@ import {
   ListItem,
   TextField,
   Typography,
-  Link,
 } from '@material-ui/core';
 import React, { useContext, useEffect } from 'react';
 import Cookies from 'js-cookie';
@@ -41,7 +40,7 @@ const Shipping = () => {
     setValue('city', shippingAddress.city);
     setValue('postalCode', shippingAddress.postalCode);
     setValue('country', shippingAddress.country);
-  }, []);
+  }, [router, shippingAddress, userInfo, setValue]);
   // const [name, setName] = useState('');
   // const [email, setEmail] = useState('');
   // const [password, setPassword] = useState('');
@@ -254,7 +253,6 @@ const Shipping = () => {
             >
               Choose on map
             </Button>
-            
           </ListItem>
           <ListItem>
             <Button
