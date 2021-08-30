@@ -38,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
   },
   navbarBtn: {
     color: '#fff',
-    textTransform: 'uppercase',
+    textTransform: 'capitalize',
   },
   transparent: {
     backgroundColor: 'transparent',

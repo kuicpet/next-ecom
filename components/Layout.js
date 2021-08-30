@@ -115,9 +115,9 @@ const Layout = ({ title, description, children }) => {
                   onChange={queryChangeHandler}
                 />
                 <IconButton
-                  type='submit'
+                  type="submit"
                   className={classes.IconButton}
-                  aria-label='search'
+                  aria-label="search"
                 >
                   <SearchIcon />
                 </IconButton>
@@ -147,7 +147,7 @@ const Layout = ({ title, description, children }) => {
                     onClick={loginClickHandler}
                     className={classes.navbarBtn}
                   >
-                    {userInfo.name}
+                   Welcome, {userInfo.name}
                   </Button>
                   <Menu
                     id="simple-menu"
@@ -162,13 +162,15 @@ const Layout = ({ title, description, children }) => {
                     >
                       Profile
                     </MenuItem>
-                    <MenuItem
-                      onClick={(e) =>
-                        loginMenuCloseHandler(e, '/order-history')
-                      }
-                    >
-                      Order History
-                    </MenuItem>
+                    {!userInfo.isAdmin && (
+                      <MenuItem
+                        onClick={(e) =>
+                          loginMenuCloseHandler(e, '/order-history')
+                        }
+                      >
+                        Order History
+                      </MenuItem>
+                    )}
                     {userInfo.isAdmin && (
                       <MenuItem
                         onClick={(e) =>
