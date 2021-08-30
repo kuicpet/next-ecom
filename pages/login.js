@@ -33,7 +33,7 @@ const Login = () => {
     if (userInfo) {
       router.push('/');
     }
-  }, [router, userInfo]);
+  });
   // const [email, setEmail] = useState('');
   // const [password, setPassword] = useState('');
   const classes = useStyles();
