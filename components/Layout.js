@@ -14,20 +14,20 @@ import {
   MenuItem,
   InputBase,
   IconButton,
-} from '@material-ui/core';
-import SearchIcon from '@material-ui/icons/Search';
-import Head from 'next/head';
-import React, { useContext, useState } from 'react';
-import NextLink from 'next/link';
-import useStyles from '../utils/styles';
-import { Store } from '../utils/Store';
-import Cookies from 'js-cookie';
-import { useRouter } from 'next/router';
+} from '@material-ui/core'
+import SearchIcon from '@material-ui/icons/Search'
+import Head from 'next/head'
+import React, { useContext, useState } from 'react'
+import NextLink from 'next/link'
+import useStyles from '../utils/styles'
+import { Store } from '../utils/Store'
+import Cookies from 'js-cookie'
+import { useRouter } from 'next/router'
 
 const Layout = ({ title, description, children }) => {
-  const router = useRouter();
-  const { state, dispatch } = useContext(Store);
-  const { darkMode, cart, userInfo } = state;
+  const router = useRouter()
+  const { state, dispatch } = useContext(Store)
+  const { darkMode, cart, userInfo } = state
   const theme = createTheme({
     typography: {
       h1: {
@@ -53,54 +53,54 @@ const Layout = ({ title, description, children }) => {
         main: '#2e2e2e',
       },
     },
-  });
-  const classes = useStyles();
+  })
+  const classes = useStyles()
   const darkModeHandler = () => {
-    dispatch({ type: darkMode ? 'DARK_MODE_OFF' : 'DARK_MODE_ON' });
-    const newDarkMode = !darkMode;
-    Cookies.set('darkMode', newDarkMode ? 'ON' : 'OFF');
-  };
-  const [anchorEl, setAnchorEl] = useState(null);
-  const [query, setQuery] = useState('');
+    dispatch({ type: darkMode ? 'DARK_MODE_OFF' : 'DARK_MODE_ON' })
+    const newDarkMode = !darkMode
+    Cookies.set('darkMode', newDarkMode ? 'ON' : 'OFF')
+  }
+  const [anchorEl, setAnchorEl] = useState(null)
+  const [query, setQuery] = useState('')
 
   const queryChangeHandler = (e) => {
-    setQuery(e.target.value);
-  };
+    setQuery(e.target.value)
+  }
 
   const submitHandler = (e) => {
-    e.preventDefault();
-    router.push(`/search?query=${query}`);
-  };
+    e.preventDefault()
+    router.push(`/search?query=${query}`)
+  }
   const loginClickHandler = (e) => {
-    setAnchorEl(e.currentTarget);
-  };
+    setAnchorEl(e.currentTarget)
+  }
 
   const loginMenuCloseHandler = (e, redirect) => {
-    setAnchorEl(null);
+    setAnchorEl(null)
     if (redirect) {
-      router.push(redirect);
+      router.push(redirect)
     }
-  };
+  }
 
   const logoutClickHandler = () => {
-    setAnchorEl(null);
-    dispatch({ type: 'USER_LOGOUT' });
-    Cookies.remove('userInfo');
-    Cookies.remove('cartItems');
-    router.push('/');
-  };
+    setAnchorEl(null)
+    dispatch({ type: 'USER_LOGOUT' })
+    Cookies.remove('userInfo')
+    Cookies.remove('cartItems')
+    router.push('/')
+  }
 
   return (
     <div>
       <Head>
         <title>{title ? `${title} - Next-Ecom` : 'Next-Ecom'}</title>
-        {description && <meta name="description" content={description} />}
+        {description && <meta name='description' content={description} />}
       </Head>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <AppBar position="static" className={classes.navbar}>
+        <AppBar position='static' className={classes.navbar}>
           <Toolbar>
-            <NextLink href="/">
+            <NextLink href='/'>
               <Link>
                 <Typography className={classes.brand}>Next-Ecom</Typography>
               </Link>
@@ -109,15 +109,15 @@ const Layout = ({ title, description, children }) => {
             <div className={classes.searchSection}>
               <form className={classes.searchForm} onSubmit={submitHandler}>
                 <InputBase
-                  name="query"
+                  name='query'
                   className={classes.searchInput}
-                  placeholder="Search Products"
+                  placeholder='Search Products'
                   onChange={queryChangeHandler}
                 />
                 <IconButton
-                  type="submit"
+                  type='submit'
                   className={classes.IconButton}
-                  aria-label="search"
+                  aria-label='search'
                 >
                   <SearchIcon />
                 </IconButton>
@@ -125,11 +125,11 @@ const Layout = ({ title, description, children }) => {
             </div>
             <div>
               <Switch checked={darkMode} onChange={darkModeHandler}></Switch>
-              <NextLink href="/cart" passHref>
+              <NextLink href='/cart' passHref>
                 <Link>
                   {cart.cartItems.length > 0 ? (
                     <Badge
-                      color="secondary"
+                      color='secondary'
                       badgeContent={cart.cartItems.length}
                     >
                       Cart
@@ -142,15 +142,15 @@ const Layout = ({ title, description, children }) => {
               {userInfo ? (
                 <>
                   <Button
-                    aria-controls="simple-menu"
-                    aria-haspopup="true"
+                    aria-controls='simple-menu'
+                    aria-haspopup='true'
                     onClick={loginClickHandler}
                     className={classes.navbarBtn}
                   >
-                   Welcome, {userInfo.name}
+                    {userInfo.name.charAt(0)}
                   </Button>
                   <Menu
-                    id="simple-menu"
+                    id='simple-menu'
                     anchorEl={anchorEl}
                     keepMounted
                     open={Boolean(anchorEl)}
@@ -184,7 +184,7 @@ const Layout = ({ title, description, children }) => {
                   </Menu>
                 </>
               ) : (
-                <NextLink href="/login" passHref>
+                <NextLink href='/login' passHref>
                   <Link>Login</Link>
                 </NextLink>
               )}
@@ -197,7 +197,7 @@ const Layout = ({ title, description, children }) => {
         </footer>
       </ThemeProvider>
     </div>
-  );
-};
+  )
+}
 
-export default Layout;
+export default Layout

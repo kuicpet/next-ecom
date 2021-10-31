@@ -45,7 +45,7 @@ const Login = () => {
         password,
       });
       dispatch({ type: 'USER_LOGIN', payload: data });
-      console.log(data);
+      // console.log(data);
       Cookies.set('userInfo', JSON.stringify(data));
       //localStorage.setItem('user', JSON.stringify(data));
       router.push(redirect || '/');
