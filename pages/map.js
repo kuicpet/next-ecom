@@ -37,31 +37,33 @@ const Map = () => {
           },
         });
         setGoogleApikey(data);
+        // getUserCurrentLocation();
+        const getUserCurrentLocation = () => {
+          if (!navigator.geolocation) {
+            enqueueSnackbar('Geolocation is not supported by this browser', {
+              variant: 'error',
+            });
+          } else {
+            navigator.geolocation.getCurrentPosition((position) => {
+              setCenter({
+                lat: position.coords.latitude,
+                lng: position.coords.longitude,
+              });
+              setLocation({
+                lat: position.coords.latitude,
+                lng: position.coords.longitude,
+              });
+            });
+          }
+        };
         getUserCurrentLocation();
       } catch (error) {
         enqueueSnackbar(getError(error), { variant: 'error' });
       }
     };
     fetchGoogleApiKey();
-  }, [userInfo.token, getUserCurrentLocation, enqueueSnackbar]);
-  const getUserCurrentLocation = () => {
-    if (!navigator.geolocation) {
-      enqueueSnackbar('Geolocation is not supported by this browser', {
-        variant: 'error',
-      });
-    } else {
-      navigator.geolocation.getCurrentPosition((position) => {
-        setCenter({
-          lat: position.coords.latitude,
-          lng: position.coords.longitude,
-        });
-        setLocation({
-          lat: position.coords.latitude,
-          lng: position.coords.longitude,
-        });
-      });
-    }
-  };
+  }, [userInfo.token, enqueueSnackbar]);
+  
   const mapRef = useRef(null);
   const placeRef = useRef(null);
   const markerRef = useRef(null);
