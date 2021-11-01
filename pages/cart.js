@@ -1,4 +1,4 @@
-import Image from 'next/image';
+import Image from 'next/image'
 import {
   Grid,
   Table,
@@ -15,50 +15,51 @@ import {
   List,
   ListItem,
   Card,
-} from '@material-ui/core';
-import React, { useContext } from 'react';
-import dynamic from 'next/dynamic';
-import NextLink from 'next/link';
-import Layout from '../components/Layout';
-import { Store } from '../utils/Store';
-import useStyles from '../utils/styles';
-import axios from 'axios';
-import { useRouter } from 'next/router';
+} from '@material-ui/core'
+import React, { useContext } from 'react'
+import dynamic from 'next/dynamic'
+import NextLink from 'next/link'
+import Layout from '../components/Layout'
+import { Store } from '../utils/Store'
+import useStyles from '../utils/styles'
+import axios from 'axios'
+import { useRouter } from 'next/router'
+import { DeleteOutlined } from '@material-ui/icons'
 
 const CartPage = () => {
   const router = useRouter()
-  const { state, dispatch } = useContext(Store);
+  const { state, dispatch } = useContext(Store)
   const {
     cart: { cartItems },
-  } = state;
-  const classes = useStyles();
+  } = state
+  const classes = useStyles()
 
   const updateCarthandler = async (item, qty) => {
-    const { data } = await axios.get(`/api/products/${item._id}`);
+    const { data } = await axios.get(`/api/products/${item._id}`)
     if (data.countInStock < qty) {
-      window.alert('Sorry, Product out of Stock');
-      return;
+      window.alert('Sorry, Product out of Stock')
+      return
     }
-    dispatch({ type: 'CART_ADD_ITEM', payload: { ...item, qty } });
-  };
+    dispatch({ type: 'CART_ADD_ITEM', payload: { ...item, qty } })
+  }
 
   const removeItemHandler = (item) => [
     dispatch({ type: 'CART_REMOVE_ITEM', payload: item }),
-  ];
+  ]
 
   const checkOutHandler = () => {
     router.push('/shipping')
-  };
+  }
 
   return (
-    <Layout title="Shopping cart">
-      <Typography component="h1" variant="h1">
+    <Layout title='Shopping cart'>
+      <Typography component='h1' variant='h1'>
         Shopping Cart
       </Typography>
       {cartItems.length === 0 ? (
         <Typography>
           You currently have no Items in your cart .
-          <NextLink href="/" passHref>
+          <NextLink href='/' passHref>
             <Link>Go shopping</Link>
           </NextLink>
         </Typography>
@@ -71,9 +72,9 @@ const CartPage = () => {
                   <TableRow>
                     <TableCell>Image</TableCell>
                     <TableCell>Name</TableCell>
-                    <TableCell align="right">Quantity</TableCell>
-                    <TableCell align="right">Price</TableCell>
-                    <TableCell align="right">Actions</TableCell>
+                    <TableCell align='right'>Quantity</TableCell>
+                    <TableCell align='right'>Price</TableCell>
+                    <TableCell align='right'>Actions</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -101,7 +102,7 @@ const CartPage = () => {
                       <TableCell>
                         <Select
                           value={item.qty}
-                          align="right"
+                          align='right'
                           onChange={(e) =>
                             updateCarthandler(item, e.target.value)
                           }
@@ -113,14 +114,14 @@ const CartPage = () => {
                           ))}
                         </Select>
                       </TableCell>
-                      <TableCell align="right">${item.price}</TableCell>
-                      <TableCell align="right">
+                      <TableCell align='right'>${item.price}</TableCell>
+                      <TableCell align='right'>
                         <Button
-                          variant="contained"
-                          color="secondary"
+                          variant='contained'
+                          color='secondary'
                           onClick={() => removeItemHandler(item)}
                         >
-                          X
+                          <DeleteOutlined />
                         </Button>
                       </TableCell>
                     </TableRow>
@@ -133,7 +134,7 @@ const CartPage = () => {
             <Card>
               <List>
                 <ListItem>
-                  <Typography variant="h2">
+                  <Typography variant='h2'>
                     SubTotal ({cartItems.reduce((a, c) => a + c.qty, 0)} items)
                     : $ {''}{' '}
                     {cartItems.reduce((a, c) => a + c.qty * c.price, 0)}
@@ -141,8 +142,8 @@ const CartPage = () => {
                 </ListItem>
                 <ListItem>
                   <Button
-                    variant="contained"
-                    color="primary"
+                    variant='contained'
+                    color='primary'
                     fullWidth
                     className={classes.button}
                     onClick={checkOutHandler}
@@ -156,7 +157,7 @@ const CartPage = () => {
         </Grid>
       )}
     </Layout>
-  );
-};
+  )
+}
 
-export default dynamic(() => Promise.resolve(CartPage), { ssr: false });
+export default dynamic(() => Promise.resolve(CartPage), { ssr: false })

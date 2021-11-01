@@ -15,7 +15,8 @@ import {
   InputBase,
   IconButton,
 } from '@material-ui/core'
-import SearchIcon from '@material-ui/icons/Search'
+// import SearchIcon from '@material-ui/icons/Search'
+import { SearchOutlined } from '@material-ui/icons'
 import Head from 'next/head'
 import React, { useContext, useState } from 'react'
 import NextLink from 'next/link'
@@ -119,7 +120,7 @@ const Layout = ({ title, description, children }) => {
                   className={classes.IconButton}
                   aria-label='search'
                 >
-                  <SearchIcon />
+                  <SearchOutlined />
                 </IconButton>
               </form>
             </div>
