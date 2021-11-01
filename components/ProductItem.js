@@ -1,14 +1,14 @@
 import {
-    Button,
+  Button,
   Card,
   CardActionArea,
   CardActions,
   CardContent,
   CardMedia,
   Typography,
-} from '@material-ui/core';
-import NextLink from 'next/link';
-import React from 'react';
+} from '@material-ui/core'
+import NextLink from 'next/link'
+import React from 'react'
 import Rating from '@material-ui/lab/Rating'
 
 const ProductItem = ({ product, addToCartHandler }) => {
@@ -17,13 +17,13 @@ const ProductItem = ({ product, addToCartHandler }) => {
       <NextLink href={`/product/${product.slug}`}>
         <CardActionArea>
           <CardMedia
-            component="img"
+            component='img'
             image={product.image}
             title={product.name}
           ></CardMedia>
           <CardContent>
             <Typography>{product.name}</Typography>
-            <Rating  value={product.rating} readOnly/>
+            <Rating value={product.rating} readOnly />
           </CardContent>
         </CardActionArea>
       </NextLink>
@@ -31,15 +31,15 @@ const ProductItem = ({ product, addToCartHandler }) => {
       <CardActions>
         <Typography>${product.price}</Typography>
         <Button
-          size="small"
-          color="primary"
+          size='small'
+          color='primary'
           onClick={() => addToCartHandler(product)}
         >
           Add to Cart
         </Button>
       </CardActions>
     </Card>
-  );
-};
+  )
+}
 
-export default ProductItem;
+export default ProductItem
