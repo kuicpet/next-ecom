@@ -72,12 +72,12 @@ const useStyles = makeStyles((theme) => ({
   searchForm: {
     border: '1px solid #ffffff',
     backgroundColor: '#ffffff',
-    borderRadius: 10,
+    borderRadius: 50,
     marginTop: '1rem',
     marginBottom: '1rem',
   },
   searchInput: {
-    paddingLeft: 5,
+    paddingLeft: 25,
     width: '300px',
     color: '#000000',
     '& ::placeholder': {

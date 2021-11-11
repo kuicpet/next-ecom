@@ -148,7 +148,7 @@ const Layout = ({ title, description, children }) => {
                     onClick={loginClickHandler}
                     className={classes.navbarBtn}
                   >
-                    {userInfo.name.charAt(0)}
+                   {userInfo.name}
                   </Button>
                   <Menu
                     id='simple-menu'
@@ -194,7 +194,7 @@ const Layout = ({ title, description, children }) => {
         </AppBar>
         <Container className={classes.main}>{children}</Container>
         <footer className={classes.footer}>
-          All rights reserved Next-Ecom
+          &copy; 2021 All rights reserved Next-Ecom
         </footer>
       </ThemeProvider>
     </div>

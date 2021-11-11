@@ -103,7 +103,7 @@ const Profile = () => {
             <List>
               <ListItem>
                 <Typography component="h1" variant="h1">
-                  Profile
+                  Hi , {userInfo.name}
                 </Typography>
               </ListItem>
               <ListItem>
