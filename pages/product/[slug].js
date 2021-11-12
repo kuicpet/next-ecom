@@ -252,12 +252,11 @@ const ProductPage = (props) => {
                 <ListItem>
                   <Button
                     type="submit"
-                    fullWidth
                     variant="contained"
                     color="primary"
                     className={classes.button}
                   >
-                    Submit
+                    Submit Review
                   </Button>
                   {loading && <CircularProgress />}
                 </ListItem>

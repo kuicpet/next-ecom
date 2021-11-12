@@ -122,7 +122,6 @@ const Login = () => {
             <Button
               variant="contained"
               type="submit"
-              fullWidth
               color="primary"
               className={classes.button}
             >

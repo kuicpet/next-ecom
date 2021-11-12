@@ -26,6 +26,7 @@ const useStyles = makeStyles((theme) => ({
   },
   button: {
     color: '#fff',
+    borderRadius: 50,
   },
   section: {
     marginTop: 10,
