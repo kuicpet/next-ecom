@@ -14,6 +14,8 @@ export default function Home(props) {
   const router = useRouter();
   const { state, dispatch } = useContext(Store);
   const { products } = props;
+  
+
   const addToCartHandler = async (product) => {
     closeSnackbar();
     const existItem = state.cart.cartItems.find((x) => x._id === product._id);

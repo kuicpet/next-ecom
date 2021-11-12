@@ -1,4 +1,4 @@
-import { makeStyles } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core'
 
 const useStyles = makeStyles((theme) => ({
   navbar: {
@@ -40,6 +40,8 @@ const useStyles = makeStyles((theme) => ({
   navbarBtn: {
     color: '#fff',
     textTransform: 'uppercase',
+    marginRight: '0.5rem',
+    marginLeft: '1rem',
   },
   transparent: {
     backgroundColor: 'transparent',
@@ -54,16 +56,16 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
   },
   padding: {
-    padding: '0 1rem'
+    padding: '0 1rem',
   },
   mt1: {
-    marginTop: '1rem'
+    marginTop: '1rem',
   },
   top: {
-    top: '3rem !important'
+    top: '3rem !important',
   },
-   // search
-   searchSection: {
+  // search
+  searchSection: {
     display: 'none',
     marginRight: '2rem',
     [theme.breakpoints.up('md')]: {
@@ -120,6 +122,6 @@ const useStyles = makeStyles((theme) => ({
     borderRight: '1px #808080 solid',
     paddingRight: '1rem',
   },
-}));
+}))
 
-export default useStyles;
+export default useStyles
