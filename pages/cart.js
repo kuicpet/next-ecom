@@ -51,16 +51,19 @@ const CartPage = () => {
     router.push('/shipping')
   }
 
+  const continueShopping = () => {
+    router.push('/')
+  }
   return (
     <Layout title='Shopping cart'>
-      <Typography component='h1' variant='h1'>
-        Shopping Cart
+      <Typography component='h1' variant='h1' align='center'>
+        Shopping Cart ({cartItems.reduce((a, c) => a + c.qty, 0)})
       </Typography>
       {cartItems.length === 0 ? (
-        <Typography>
-          You currently have no Items in your cart .
+        <Typography align='center'>
+          You have no Items in your cart{' '}
           <NextLink href='/' passHref>
-            <Link>Go shopping</Link>
+            <Link>Keep shopping</Link>
           </NextLink>
         </Typography>
       ) : (
@@ -137,7 +140,7 @@ const CartPage = () => {
                   <Typography variant='h2'>
                     SubTotal ({cartItems.reduce((a, c) => a + c.qty, 0)} items)
                     : $ {''}{' '}
-                    {cartItems.reduce((a, c) => a + c.qty * c.price, 0)}
+                    {cartItems.reduce((a, c) => a + c.qty * c.price, 0).toFixed(2)}
                   </Typography>
                 </ListItem>
                 <ListItem>
@@ -149,6 +152,17 @@ const CartPage = () => {
                     onClick={checkOutHandler}
                   >
                     Check Out
+                  </Button>
+                </ListItem>
+                <ListItem>
+                  <Button
+                    variant='contained'
+                    color='primary'
+                    fullWidth
+                    className={classes.button}
+                    onClick={continueShopping}
+                  >
+                    Continue Shopping
                   </Button>
                 </ListItem>
               </List>

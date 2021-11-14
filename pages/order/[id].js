@@ -1,4 +1,4 @@
-import Image from 'next/image';
+import Image from 'next/image'
 import {
   Grid,
   Table,
@@ -14,18 +14,19 @@ import {
   ListItem,
   Card,
   CircularProgress,
-} from '@material-ui/core';
-import React, { useContext, useEffect, useReducer } from 'react';
-import dynamic from 'next/dynamic';
-import NextLink from 'next/link';
-import Layout from '../../components/Layout';
-import { Store } from '../../utils/Store';
-import useStyles from '../../utils/styles';
-import axios from 'axios';
-import { useRouter } from 'next/router';
-import { useSnackbar } from 'notistack';
-import { getError } from '../../utils/error';
-import { PayPalButtons, usePayPalScriptReducer } from '@paypal/react-paypal-js';
+} from '@material-ui/core'
+import React, { useContext, useEffect, useReducer } from 'react'
+import dynamic from 'next/dynamic'
+import NextLink from 'next/link'
+import Layout from '../../components/Layout'
+import { Store } from '../../utils/Store'
+import useStyles from '../../utils/styles'
+import axios from 'axios'
+import { useRouter } from 'next/router'
+import { useSnackbar } from 'notistack'
+import { getError } from '../../utils/error'
+import { PayPalButtons, usePayPalScriptReducer } from '@paypal/react-paypal-js'
+import Skeleton  from 'react-loading-skeleton'
 
 function reducer(state, action) {
   switch (action.type) {
@@ -33,82 +34,82 @@ function reducer(state, action) {
       return {
         ...state,
         loading: true,
-      };
+      }
     case 'FETCH_SUCCESS':
       return {
         ...state,
         loading: false,
         order: action.payload,
         error: '',
-      };
+      }
     case 'FETCH_FAIL':
       return {
         ...state,
         loading: false,
         error: action.payload,
-      };
+      }
     case 'PAY_REQUEST':
       return {
         ...state,
         loadingPay: true,
-      };
+      }
     case 'PAY_SUCCESS':
       return {
         ...state,
         loadingPay: false,
         successPay: true,
-      };
+      }
     case 'PAY_FAIL':
       return {
         ...state,
         loadingPay: false,
         errorPay: action.payload,
-      };
+      }
     case 'PAY_RESET':
       return {
         ...state,
         loadingPay: false,
         successPay: false,
         errorPay: '',
-      };
+      }
     case 'DELIVER_REQUEST':
       return {
         ...state,
         loadingDeliver: true,
-      };
+      }
     case 'DELIVER_SUCCESS':
       return {
         ...state,
         loadingDeliver: false,
         successDeliver: true,
-      };
+      }
     case 'DELIVER_FAIL':
       return {
         ...state,
         loadingDeliver: false,
         errorDeliver: action.payload,
-      };
+      }
     case 'DELIVER_RESET':
       return {
         ...state,
         loadingDeliver: false,
         successDeliver: false,
         errorDeliver: '',
-      };
+      }
 
     default:
-      return state;
+      return state
   }
 }
 
 const Order = ({ params }) => {
-  const orderId = params.id;
-  const [{ isPending }, paypalDispatch] = usePayPalScriptReducer();
-  const router = useRouter();
-  const { state } = useContext(Store);
-  const { userInfo } = state;
-  const classes = useStyles();
-  const { enqueueSnackbar } = useSnackbar();
+  const orderId = params.id
+  const [{ isPending }, paypalDispatch] = usePayPalScriptReducer()
+  const router = useRouter()
+  const { state } = useContext(Store)
+  const { userInfo } = state
+  const classes = useStyles()
+  const { enqueueSnackbar } = useSnackbar()
 
   const [
     { loading, error, order, successPay, successDeliver, loadingDeliver },
@@ -117,7 +118,7 @@ const Order = ({ params }) => {
     loading: true,
     error: '',
     order: {},
-  });
+  })
   const {
     shippingAddress,
     paymentMethod,
@@ -130,36 +131,36 @@ const Order = ({ params }) => {
     deliveredAt,
     isPaid,
     paidAt,
-  } = order;
+  } = order
   useEffect(() => {
     if (!userInfo) {
-      return router.push('/login');
+      return router.push('/login')
     }
     const fetchOrder = async () => {
       try {
-        dispatch({ type: 'FETCH_REQUEST' });
+        dispatch({ type: 'FETCH_REQUEST' })
         const { data } = await axios.get(`/api/orders/${orderId}`, {
           headers: {
             authorization: `Bearer ${userInfo.token}`,
           },
-        });
-        dispatch({ type: 'FETCH_SUCCESS', payload: data });
+        })
+        dispatch({ type: 'FETCH_SUCCESS', payload: data })
       } catch (error) {
-        dispatch({ type: 'FETCH_ERROR', payload: getError(error) });
+        dispatch({ type: 'FETCH_ERROR', payload: getError(error) })
       }
-    };
+    }
     if (
       !order._id ||
       successPay ||
       successDeliver ||
       (order._id && order._id !== orderId)
     ) {
-      fetchOrder();
+      fetchOrder()
       if (successPay) {
-        dispatch({ type: 'PAY_RESET' });
+        dispatch({ type: 'PAY_RESET' })
       }
       if (successDeliver) {
-        dispatch({ type: 'DELIVER_RESET' });
+        dispatch({ type: 'DELIVER_RESET' })
       }
     } else {
       const loadPaypalScript = async () => {
@@ -167,17 +168,17 @@ const Order = ({ params }) => {
           headers: {
             authorization: `Bearer ${userInfo.token}`,
           },
-        });
+        })
         paypalDispatch({
           type: 'resetOptions',
           value: {
             'client-id': clientId,
             currency: 'USD',
           },
-        });
-        paypalDispatch({ type: 'setLoadingStatus', value: 'pending' });
-      };
-      loadPaypalScript();
+        })
+        paypalDispatch({ type: 'setLoadingStatus', value: 'pending' })
+      }
+      loadPaypalScript()
     }
   }, [
     orderId,
@@ -187,7 +188,7 @@ const Order = ({ params }) => {
     userInfo,
     router,
     paypalDispatch,
-  ]);
+  ])
   const createOrder = (data, actions) => {
     return actions.order
       .create({
@@ -198,13 +199,13 @@ const Order = ({ params }) => {
         ],
       })
       .then((orderID) => {
-        return orderID;
-      });
-  };
+        return orderID
+      })
+  }
   const onApprove = (data, actions) => {
     return actions.order.capture().then(async (details) => {
       try {
-        dispatch({ type: 'PAY_REQUEST' });
+        dispatch({ type: 'PAY_REQUEST' })
         const { data } = await axios.put(
           `/api/orders/${order._id}/pay`,
           details,
@@ -213,21 +214,21 @@ const Order = ({ params }) => {
               authorization: `Bearer ${userInfo.token}`,
             },
           }
-        );
-        dispatch({ type: 'PAY_SUCCESS', payload: data });
-        enqueueSnackbar('Order is paid', { variant: 'success' });
+        )
+        dispatch({ type: 'PAY_SUCCESS', payload: data })
+        enqueueSnackbar('Order is paid', { variant: 'success' })
       } catch (error) {
-        dispatch({ type: 'PAY_FAIL', payload: getError(error) });
-        enqueueSnackbar(getError(error), { variant: 'error' });
+        dispatch({ type: 'PAY_FAIL', payload: getError(error) })
+        enqueueSnackbar(getError(error), { variant: 'error' })
       }
-    });
-  };
+    })
+  }
   const onError = (error) => {
-    enqueueSnackbar(getError(error), { variant: 'error' });
-  };
+    enqueueSnackbar(getError(error), { variant: 'error' })
+  }
   const deliverOrderHandler = async () => {
     try {
-      dispatch({ type: 'DELIVER_REQUEST' });
+      dispatch({ type: 'DELIVER_REQUEST' })
       const { data } = await axios.put(
         `/api/orders/${order._id}/deliver`,
         {},
@@ -236,21 +237,21 @@ const Order = ({ params }) => {
             authorization: `Bearer ${userInfo.token}`,
           },
         }
-      );
-      dispatch({ type: 'DELIVER_SUCCESS', payload: data });
-      enqueueSnackbar('Order is delivered', { variant: 'success' });
+      )
+      dispatch({ type: 'DELIVER_SUCCESS', payload: data })
+      enqueueSnackbar('Order is delivered', { variant: 'success' })
     } catch (error) {
-      dispatch({ type: 'DELIVER_FAIL', payload: getError(error) });
-      enqueueSnackbar(getError(error), { variant: 'error' });
+      dispatch({ type: 'DELIVER_FAIL', payload: getError(error) })
+      enqueueSnackbar(getError(error), { variant: 'error' })
     }
-  };
+  }
   return (
     <Layout title={`Order ${orderId}`}>
-      <Typography component="h1" variant="h1">
+      <Typography component='h1' variant='h1'>
         Order {orderId}
       </Typography>
       {loading ? (
-        <CircularProgress />
+        <Skeleton />
       ) : error ? (
         <Typography className={classes.error}>{error}</Typography>
       ) : (
@@ -259,7 +260,7 @@ const Order = ({ params }) => {
             <Card className={classes.section}>
               <List>
                 <ListItem>
-                  <Typography component="h2" variant="h2">
+                  <Typography component='h2' variant='h2'>
                     Shipping Address
                   </Typography>
                 </ListItem>
@@ -271,8 +272,8 @@ const Order = ({ params }) => {
                     &nbsp;
                     {shippingAddress.location && (
                       <Link
-                        variant="button"
-                        target="_new"
+                        variant='button'
+                        target='_new'
                         href={`https://maps.google.com?q=${shippingAddress.location.lat},${shippingAddress.location.lng}`}
                       >
                         Show On Map
@@ -293,7 +294,7 @@ const Order = ({ params }) => {
             <Card className={classes.section}>
               <List>
                 <ListItem>
-                  <Typography component="h2" variant="h2">
+                  <Typography component='h2' variant='h2'>
                     Payment Method
                   </Typography>
                 </ListItem>
@@ -312,7 +313,7 @@ const Order = ({ params }) => {
             <Card className={classes.section}>
               <List>
                 <ListItem>
-                  <Typography component="h2" variant="h2">
+                  <Typography component='h2' variant='h2'>
                     Order Items
                   </Typography>
                 </ListItem>
@@ -323,8 +324,8 @@ const Order = ({ params }) => {
                         <TableRow>
                           <TableCell>Image</TableCell>
                           <TableCell>Name</TableCell>
-                          <TableCell align="right">Quantity</TableCell>
-                          <TableCell align="right">Price</TableCell>
+                          <TableCell align='right'>Quantity</TableCell>
+                          <TableCell align='right'>Price</TableCell>
                         </TableRow>
                       </TableHead>
                       <TableBody>
@@ -352,7 +353,7 @@ const Order = ({ params }) => {
                             <TableCell>
                               <Typography>{item.qty}</Typography>
                             </TableCell>
-                            <TableCell align="right">
+                            <TableCell align='right'>
                               <Typography>${item.price}</Typography>
                             </TableCell>
                           </TableRow>
@@ -368,7 +369,7 @@ const Order = ({ params }) => {
             <Card className={classes.section}>
               <List>
                 <ListItem>
-                  <Typography variant="h2">Order Summary</Typography>
+                  <Typography variant='h2'>Order Summary</Typography>
                 </ListItem>
                 <ListItem>
                   <Grid container>
@@ -376,7 +377,7 @@ const Order = ({ params }) => {
                       <Typography>Item:</Typography>
                     </Grid>
                     <Grid item xs={6}>
-                      <Typography align="right">${itemsPrice}</Typography>
+                      <Typography align='right'>${itemsPrice}</Typography>
                     </Grid>
                   </Grid>
                 </ListItem>
@@ -386,7 +387,7 @@ const Order = ({ params }) => {
                       <Typography>Tax:</Typography>
                     </Grid>
                     <Grid item xs={6}>
-                      <Typography align="right">${taxPrice}</Typography>
+                      <Typography align='right'>${taxPrice}</Typography>
                     </Grid>
                   </Grid>
                 </ListItem>
@@ -396,7 +397,7 @@ const Order = ({ params }) => {
                       <Typography>Shipping:</Typography>
                     </Grid>
                     <Grid item xs={6}>
-                      <Typography align="right">${shippingPrice}</Typography>
+                      <Typography align='right'>${shippingPrice}</Typography>
                     </Grid>
                   </Grid>
                 </ListItem>
@@ -408,7 +409,7 @@ const Order = ({ params }) => {
                       </Typography>
                     </Grid>
                     <Grid item xs={6}>
-                      <Typography align="right">
+                      <Typography align='right'>
                         <strong>${totalPrice}</strong>
                       </Typography>
                     </Grid>
@@ -433,8 +434,8 @@ const Order = ({ params }) => {
                   <ListItem>
                     {loadingDeliver && <CircularProgress />}
                     <Button
-                      variant="contained"
-                      color="primary"
+                      variant='contained'
+                      color='primary'
                       className={classes.button}
                       onClick={deliverOrderHandler}
                     >
@@ -448,15 +449,15 @@ const Order = ({ params }) => {
         </Grid>
       )}
     </Layout>
-  );
-};
+  )
+}
 
 export async function getServerSideProps({ params }) {
   return {
     props: {
       params,
     },
-  };
+  }
 }
 
-export default dynamic(() => Promise.resolve(Order), { ssr: false });
+export default dynamic(() => Promise.resolve(Order), { ssr: false })

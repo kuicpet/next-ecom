@@ -131,7 +131,7 @@ const Layout = ({ title, description, children }) => {
                   {cart.cartItems.length > 0 ? (
                     <Badge
                       color='secondary'
-                      badgeContent={cart.cartItems.length}
+                      badgeContent={cart.cartItems.reduce((a, c) => a + c.qty, 0)}
                     >
                       Cart
                     </Badge>
