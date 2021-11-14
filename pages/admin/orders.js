@@ -76,7 +76,7 @@ const AdminOrders = () => {
           },
         });
         dispatch({ type: 'FETCH_SUCCESS', payload: data });
-        console.log(data);
+        // console.log(data);
       } catch (error) {
         dispatch({ type: 'FETCH_ERROR', payload: getError(error) });
       }
@@ -153,7 +153,7 @@ const AdminOrders = () => {
                             </TableCell>
                             <TableCell>
                               {order.isDelivered
-                                ? `paid at ${order.deliveredAt}`
+                                ? `delivered at ${order.deliveredAt}`
                                 : 'not delivered'}
                             </TableCell>
                             <TableCell>
