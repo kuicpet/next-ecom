@@ -16,7 +16,7 @@ import {
   IconButton,
 } from '@material-ui/core'
 // import SearchIcon from '@material-ui/icons/Search'
-import { SearchOutlined } from '@material-ui/icons'
+import { AccountCircleOutlined, SearchOutlined } from '@material-ui/icons'
 import Head from 'next/head'
 import React, { useContext, useState } from 'react'
 import NextLink from 'next/link'
@@ -99,7 +99,7 @@ const Layout = ({ title, description, children }) => {
       </Head>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <AppBar position='static' className={classes.navbar}>
+        <AppBar position='fixed' className={classes.navbar}>
           <Toolbar>
             <NextLink href='/'>
               <Link>
@@ -142,13 +142,15 @@ const Layout = ({ title, description, children }) => {
               </NextLink>
               {userInfo ? (
                 <>
+                  
                   <Button
                     aria-controls='simple-menu'
                     aria-haspopup='true'
                     onClick={loginClickHandler}
                     className={classes.navbarBtn}
                   >
-                   {userInfo.name}
+                    <AccountCircleOutlined />
+                    {' '}{' '}{userInfo.name}
                   </Button>
                   <Menu
                     id='simple-menu'

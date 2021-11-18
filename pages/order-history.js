@@ -149,7 +149,7 @@ const OrderHistory = () => {
                             </TableCell>
                             <TableCell>
                               {order.isDelivered
-                                ? `paid at ${order.deliveredAt}`
+                                ? `delivered at ${order.deliveredAt}`
                                 : 'not delivered'}
                             </TableCell>
                             <TableCell>

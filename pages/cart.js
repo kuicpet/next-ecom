@@ -138,8 +138,12 @@ const CartPage = () => {
               <List>
                 <ListItem>
                   <Typography variant='h2'>
-                    SubTotal ({cartItems.reduce((a, c) => a + c.qty, 0)} items)
-                    : $ {''}{' '}
+                    SubTotal ({cartItems.reduce((a, c) => a + c.qty, 0)} items) : 
+                  </Typography>
+                </ListItem>
+                <ListItem>
+                  <Typography variant='h2'>
+                  ${' '}
                     {cartItems.reduce((a, c) => a + c.qty * c.price, 0).toFixed(2)}
                   </Typography>
                 </ListItem>

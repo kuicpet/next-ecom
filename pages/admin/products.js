@@ -134,6 +134,7 @@ const AdminProducts = () => {
       fetchProducts();
     }
   }, [successDelete,userInfo, router]);
+
   const createProductHandler = async () => {
     if (!window.confirm('Are you sure')) {
       return;
@@ -157,6 +158,7 @@ const AdminProducts = () => {
       enqueueSnackbar(getError(error), { variant: 'error' });
     }
   };
+  
   const deleteHandler = async (productId) => {
     if (!window.confirm('Are you sure')) {
       return;
