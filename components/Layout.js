@@ -131,7 +131,10 @@ const Layout = ({ title, description, children }) => {
                   {cart.cartItems.length > 0 ? (
                     <Badge
                       color='secondary'
-                      badgeContent={cart.cartItems.reduce((a, c) => a + c.qty, 0)}
+                      badgeContent={cart.cartItems.reduce(
+                        (a, c) => a + c.qty,
+                        0
+                      )}
                     >
                       Cart
                     </Badge>
@@ -140,17 +143,16 @@ const Layout = ({ title, description, children }) => {
                   )}
                 </Link>
               </NextLink>
+
               {userInfo ? (
                 <>
-                  
                   <Button
                     aria-controls='simple-menu'
                     aria-haspopup='true'
                     onClick={loginClickHandler}
                     className={classes.navbarBtn}
                   >
-                    <AccountCircleOutlined />
-                    {' '}{' '}{userInfo.name}
+                    <AccountCircleOutlined /> {userInfo.name}
                   </Button>
                   <Menu
                     id='simple-menu'

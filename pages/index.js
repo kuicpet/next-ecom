@@ -9,11 +9,11 @@ import Product from '../models/Products'
 import db from '../utils/db'
 import { Store } from '../utils/Store'
 
-export default function Home(props) {
+export default function Home({ products }) {
   const { enqueueSnackbar, closeSnackbar } = useSnackbar()
   const router = useRouter()
   const { state, dispatch } = useContext(Store)
-  const { products } = props
+  // const { products } = props
 
   const addToCartHandler = async (product) => {
     closeSnackbar()
@@ -33,7 +33,7 @@ export default function Home(props) {
   return (
     <Layout>
       <div>
-        <h2>Products</h2>
+        <h2>Products <span className='product-items'>{products.length} Items</span></h2>
         <Grid container spacing={3}>
           {products.map((product) => (
             <Grid item md={4} key={product.name}>
