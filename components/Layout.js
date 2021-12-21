@@ -127,7 +127,7 @@ const Layout = ({ title, description, children }) => {
             <div>
               <Switch checked={darkMode} onChange={darkModeHandler}></Switch>
               <NextLink href='/cart' passHref>
-                <Button>
+                <IconButton>
                   {cart.cartItems.length > 0 ? (
                     <Badge
                       color='secondary'
@@ -141,7 +141,7 @@ const Layout = ({ title, description, children }) => {
                   ) : (
                     <ShoppingCartOutlined />
                   )}
-                </Button>
+                </IconButton>
               </NextLink>
 
               {userInfo ? (
