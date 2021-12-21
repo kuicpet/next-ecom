@@ -188,6 +188,7 @@ const Register = () => {
               variant="contained"
               type="submit"
               color="primary"
+              fullWidth
               className={classes.button}
             >
               Register

@@ -248,7 +248,7 @@ const Order = ({ params }) => {
   return (
     <Layout title={`Order ${orderId}`}>
       <Typography component='h1' variant='h1'>
-        Order {orderId}
+        Your Order id: {orderId}
       </Typography>
       {loading ? (
         <Skeleton />
@@ -261,7 +261,7 @@ const Order = ({ params }) => {
               <List>
                 <ListItem>
                   <Typography component='h2' variant='h2'>
-                    Shipping Address
+                    SHIPPING ADDRESS
                   </Typography>
                 </ListItem>
                 <ListItem>
@@ -295,7 +295,7 @@ const Order = ({ params }) => {
               <List>
                 <ListItem>
                   <Typography component='h2' variant='h2'>
-                    Payment Method
+                    PAYMENT METHOD
                   </Typography>
                 </ListItem>
                 <ListItem>
@@ -314,7 +314,7 @@ const Order = ({ params }) => {
               <List>
                 <ListItem>
                   <Typography component='h2' variant='h2'>
-                    Order Items
+                    ORDER ITEMS
                   </Typography>
                 </ListItem>
                 <ListItem>
@@ -322,10 +322,10 @@ const Order = ({ params }) => {
                     <Table>
                       <TableHead>
                         <TableRow>
-                          <TableCell>Image</TableCell>
-                          <TableCell>Name</TableCell>
-                          <TableCell align='right'>Quantity</TableCell>
-                          <TableCell align='right'>Price</TableCell>
+                          <TableCell></TableCell>
+                          <TableCell>PRODUCT</TableCell>
+                          <TableCell align='justify'>QUANTITY</TableCell>
+                          <TableCell align='justify'>PRICE</TableCell>
                         </TableRow>
                       </TableHead>
                       <TableBody>
@@ -343,17 +343,17 @@ const Order = ({ params }) => {
                                 </Link>
                               </NextLink>
                             </TableCell>
-                            <TableCell>
+                            <TableCell align='justify'>
                               <NextLink href={`/product/${item._id}`} passHref>
                                 <Link>
                                   <Typography>{item.name}</Typography>
                                 </Link>
                               </NextLink>
                             </TableCell>
-                            <TableCell>
+                            <TableCell align='justify'>
                               <Typography>{item.qty}</Typography>
                             </TableCell>
-                            <TableCell align='right'>
+                            <TableCell align='justify'>
                               <Typography>${item.price}</Typography>
                             </TableCell>
                           </TableRow>
@@ -369,12 +369,12 @@ const Order = ({ params }) => {
             <Card className={classes.section}>
               <List>
                 <ListItem>
-                  <Typography variant='h2'>Order Summary</Typography>
+                  <Typography variant='h2'>ORDER SUMMARY</Typography>
                 </ListItem>
                 <ListItem>
                   <Grid container>
                     <Grid item xs={6}>
-                      <Typography>Item:</Typography>
+                      <Typography>Product:</Typography>
                     </Grid>
                     <Grid item xs={6}>
                       <Typography align='right'>${itemsPrice}</Typography>
@@ -405,7 +405,7 @@ const Order = ({ params }) => {
                   <Grid container>
                     <Grid item xs={6}>
                       <Typography>
-                        <strong>Total:</strong>
+                        <strong>TOTAL:</strong>
                       </Typography>
                     </Grid>
                     <Grid item xs={6}>

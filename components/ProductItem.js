@@ -10,8 +10,10 @@ import {
 import NextLink from 'next/link'
 import React from 'react'
 import Rating from '@material-ui/lab/Rating'
+import useStyles from '../utils/styles'
 
 const ProductItem = ({ product, addToCartHandler }) => {
+  const classes = useStyles()
   return (
     <Card>
       <NextLink href={`/product/${product.slug}`}>
@@ -29,11 +31,13 @@ const ProductItem = ({ product, addToCartHandler }) => {
       </NextLink>
 
       <CardActions>
-        <Typography>${product.price}</Typography>
+        <Typography className={classes.marginRight}>${product.price}</Typography>
         <Button
           size='small'
           color='primary'
           onClick={() => addToCartHandler(product)}
+          variant='contained'
+          className={classes.marginLeft}
         >
           Add to Cart
         </Button>

@@ -27,6 +27,7 @@ import CheckOutSteps from '../components/CheckOutSteps';
 import { useSnackbar } from 'notistack';
 import { getError } from '../utils/error';
 import Cookies from 'js-cookie';
+import { ArrowBackIosOutlined } from '@material-ui/icons';
 
 const PlaceOrder = () => {
   const [loading, setLoading] = useState(false);
@@ -75,10 +76,10 @@ const PlaceOrder = () => {
           },
         }
       );
+      router.push(`/order/${data._id}`)
       dispatch({ type: 'CART_CLEAR' });
       Cookies.remove('cartItems');
       setLoading(false);
-      router.push(`/order/${data._id}`)
     } catch (error) {
       setLoading(false);
       enqueueSnackbar(getError(error), { variant: 'error' });
@@ -87,9 +88,16 @@ const PlaceOrder = () => {
 
   return (
     <Layout title="Place Order">
+      <div className={classes.section}>
+        <NextLink href="/cart" passHref>
+          <Link>
+          <ArrowBackIosOutlined />
+          </Link>
+        </NextLink>
+      </div>
       <CheckOutSteps activeStep={3} />
       <Typography component="h1" variant="h1">
-        Place Order
+        PLACE ORDER
       </Typography>
 
       <Grid container spacing={1}>
@@ -98,7 +106,7 @@ const PlaceOrder = () => {
             <List>
               <ListItem>
                 <Typography component="h2" variant="h2">
-                  Shipping Address
+                  SHIPPING ADDRESS
                 </Typography>
               </ListItem>
               <ListItem>
@@ -114,7 +122,7 @@ const PlaceOrder = () => {
             <List>
               <ListItem>
                 <Typography component="h2" variant="h2">
-                  Payment Method
+                  PAYMENT METHOD
                 </Typography>
               </ListItem>
               <ListItem>
@@ -128,7 +136,7 @@ const PlaceOrder = () => {
             <List>
               <ListItem>
                 <Typography component="h2" variant="h2">
-                  Order Items
+                  ORDER ITEMS
                 </Typography>
               </ListItem>
               <ListItem>
@@ -136,10 +144,10 @@ const PlaceOrder = () => {
                   <Table>
                     <TableHead>
                       <TableRow>
-                        <TableCell>Image</TableCell>
-                        <TableCell>Name</TableCell>
-                        <TableCell align="right">Quantity</TableCell>
-                        <TableCell align="right">Price</TableCell>
+                        <TableCell></TableCell>
+                        <TableCell>PRODUCT</TableCell>
+                        <TableCell align="justify">QUANTITY</TableCell>
+                        <TableCell align="justify">PRICE</TableCell>
                       </TableRow>
                     </TableHead>
                     <TableBody>
@@ -164,10 +172,10 @@ const PlaceOrder = () => {
                               </Link>
                             </NextLink>
                           </TableCell>
-                          <TableCell align="right">
+                          <TableCell align="justify">
                             <Typography>{item.qty}</Typography>
                           </TableCell>
-                          <TableCell align="right">
+                          <TableCell align="justify">
                             <Typography>${item.price}</Typography>
                           </TableCell>
                         </TableRow>
@@ -183,7 +191,7 @@ const PlaceOrder = () => {
           <Card className={classes.section}>
             <List>
               <ListItem>
-                <Typography variant="h2">Order Summary</Typography>
+                <Typography variant="h2">ORDER SUMMARY</Typography>
               </ListItem>
               <ListItem>
                 <Grid container>

@@ -16,7 +16,7 @@ import {
   IconButton,
 } from '@material-ui/core'
 // import SearchIcon from '@material-ui/icons/Search'
-import { AccountCircleOutlined, SearchOutlined } from '@material-ui/icons'
+import { AccountCircleOutlined, SearchOutlined, ShoppingCartOutlined } from '@material-ui/icons'
 import Head from 'next/head'
 import React, { useContext, useState } from 'react'
 import NextLink from 'next/link'
@@ -48,7 +48,7 @@ const Layout = ({ title, description, children }) => {
     palette: {
       type: darkMode ? 'dark' : 'light',
       primary: {
-        main: '#f47036',
+        main: '#000',
       },
       secondary: {
         main: '#2e2e2e',
@@ -127,7 +127,7 @@ const Layout = ({ title, description, children }) => {
             <div>
               <Switch checked={darkMode} onChange={darkModeHandler}></Switch>
               <NextLink href='/cart' passHref>
-                <Link>
+                <Button>
                   {cart.cartItems.length > 0 ? (
                     <Badge
                       color='secondary'
@@ -136,12 +136,12 @@ const Layout = ({ title, description, children }) => {
                         0
                       )}
                     >
-                      Cart
+                      <ShoppingCartOutlined />
                     </Badge>
                   ) : (
-                    'Cart'
+                    <ShoppingCartOutlined />
                   )}
-                </Link>
+                </Button>
               </NextLink>
 
               {userInfo ? (
@@ -151,8 +151,9 @@ const Layout = ({ title, description, children }) => {
                     aria-haspopup='true'
                     onClick={loginClickHandler}
                     className={classes.navbarBtn}
+                    startIcon={<AccountCircleOutlined />}
                   >
-                    <AccountCircleOutlined /> {userInfo.name}
+                    {userInfo.name}
                   </Button>
                   <Menu
                     id='simple-menu'

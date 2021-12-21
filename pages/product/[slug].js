@@ -23,6 +23,7 @@ import { Store } from '../../utils/Store';
 import { useSnackbar } from 'notistack';
 import { getError } from '../../utils/error';
 import { Rating } from '@material-ui/lab';
+import { ArrowBackIosOutlined } from '@material-ui/icons';
 
 const ProductPage = (props) => {
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
@@ -94,7 +95,7 @@ const ProductPage = (props) => {
       <div className={classes.section}>
         <NextLink href="/" passHref>
           <Link>
-            <Typography>Go Back</Typography>
+          <ArrowBackIosOutlined />
           </Link>
         </NextLink>
       </div>

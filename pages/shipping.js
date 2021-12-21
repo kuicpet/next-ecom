@@ -1,18 +1,21 @@
 import {
   Button,
   List,
+  Link,
   ListItem,
   TextField,
   Typography,
 } from '@material-ui/core';
 import React, { useContext, useEffect } from 'react';
 import Cookies from 'js-cookie';
+import NextLink from 'next/link'
 import Layout from '../components/Layout';
 import useStyles from '../utils/styles';
 import { useRouter } from 'next/router';
 import { Store } from '../utils/Store';
 import { Controller, useForm } from 'react-hook-form';
 import CheckOutSteps from '../components/CheckOutSteps';
+import { ArrowBackIosOutlined } from '@material-ui/icons';
 
 const Shipping = () => {
   const {
@@ -95,10 +98,17 @@ const Shipping = () => {
   };
   return (
     <Layout title="Shipping Address">
+      <div className={classes.section}>
+        <NextLink href="/cart" passHref>
+          <Link>
+          <ArrowBackIosOutlined />
+          </Link>
+        </NextLink>
+      </div>
       <CheckOutSteps activeStep={1} />
       <form className={classes.form} onSubmit={handleSubmit(submitHandler)}>
         <Typography component="h1" variant="h1">
-          Shipping Address
+          SHIPPING ADDRESS
         </Typography>
         <List>
           <ListItem>

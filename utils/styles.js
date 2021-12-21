@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
   },
   button: {
     color: '#fff',
-    borderRadius: 50,
+    borderRadius: 0,
   },
   section: {
     marginTop: 10,
@@ -59,6 +59,12 @@ const useStyles = makeStyles((theme) => ({
   padding: {
     padding: '0 1rem',
   },
+  marginLeft: {
+    marginLeft: 'auto'
+  },
+  marginRight: {
+    marginRight: 'auto'
+  },
   mt1: {
     marginTop: '1rem',
   },
@@ -76,7 +82,7 @@ const useStyles = makeStyles((theme) => ({
   searchForm: {
     border: '1px solid #ffffff',
     backgroundColor: '#ffffff',
-    borderRadius: 50,
+    borderRadius: 0,
     marginTop: '1rem',
     marginBottom: '1rem',
   },

@@ -123,6 +123,7 @@ const Login = () => {
               variant="contained"
               type="submit"
               color="primary"
+              fullWidth
               className={classes.button}
             >
               Login

@@ -9,13 +9,16 @@ import {
   Button,
   FormControl,
   FormControlLabel,
+  Link,
   List,
   ListItem,
   Radio,
   RadioGroup,
   Typography,
 } from '@material-ui/core';
+import NextLink from 'next/link'
 import { useSnackbar } from 'notistack';
+import { ArrowBackIosOutlined } from '@material-ui/icons';
 
 export default function Payment() {
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
@@ -46,10 +49,17 @@ export default function Payment() {
   };
   return (
     <Layout title="Payment Method">
+      <div className={classes.section}>
+        <NextLink href="/shipping" passHref>
+          <Link>
+          <ArrowBackIosOutlined />
+          </Link>
+        </NextLink>
+      </div>
       <CheckOutSteps activeStep={2} />
       <form className={classes.form} onSubmit={submitHandler}>
         <Typography component="h1" variant="h1">
-          Payment Method
+          PAYMENT METHOD
         </Typography>
         <List>
           <ListItem>

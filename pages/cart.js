@@ -15,6 +15,7 @@ import {
   List,
   ListItem,
   Card,
+  IconButton,
 } from '@material-ui/core'
 import React, { useContext } from 'react'
 import dynamic from 'next/dynamic'
@@ -24,7 +25,7 @@ import { Store } from '../utils/Store'
 import useStyles from '../utils/styles'
 import axios from 'axios'
 import { useRouter } from 'next/router'
-import { DeleteOutlined } from '@material-ui/icons'
+import { DeleteOutlined, ArrowBackIosOutlined } from '@material-ui/icons'
 
 const CartPage = () => {
   const router = useRouter()
@@ -63,21 +64,28 @@ const CartPage = () => {
         <Typography align='center'>
           You have no Items in your cart{' '}
           <NextLink href='/' passHref>
-            <Link>Keep shopping</Link>
+            <Link>keep shopping</Link>
           </NextLink>
         </Typography>
       ) : (
         <Grid container spacing={1}>
           <Grid item md={9} xs={12}>
+            <div className={classes.section}>
+              <NextLink href='/' passHref>
+                <Link>
+                  <ArrowBackIosOutlined />
+                </Link>
+              </NextLink>
+            </div>
             <TableContainer>
               <Table>
                 <TableHead>
                   <TableRow>
-                    <TableCell>Image</TableCell>
-                    <TableCell>Name</TableCell>
-                    <TableCell align='right'>Quantity</TableCell>
-                    <TableCell align='right'>Price</TableCell>
-                    <TableCell align='right'>Actions</TableCell>
+                    <TableCell></TableCell>
+                    <TableCell>PRODUCT</TableCell>
+                    <TableCell align='justify'>QUANTITY</TableCell>
+                    <TableCell align='justify'>PRICE</TableCell>
+                    <TableCell align='justify'></TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -95,17 +103,17 @@ const CartPage = () => {
                           </Link>
                         </NextLink>
                       </TableCell>
-                      <TableCell>
+                      <TableCell align='justify'>
                         <NextLink href={`/product/${item.slug}`} passHref>
                           <Link>
                             <Typography>{item.name}</Typography>
                           </Link>
                         </NextLink>
                       </TableCell>
-                      <TableCell>
+                      <TableCell align='justify'>
                         <Select
                           value={item.qty}
-                          align='right'
+                          align='justify'
                           onChange={(e) =>
                             updateCarthandler(item, e.target.value)
                           }
@@ -117,15 +125,11 @@ const CartPage = () => {
                           ))}
                         </Select>
                       </TableCell>
-                      <TableCell align='right'>${item.price}</TableCell>
-                      <TableCell align='right'>
-                        <Button
-                          variant='contained'
-                          color='secondary'
-                          onClick={() => removeItemHandler(item)}
-                        >
+                      <TableCell align='justify'>${item.price}</TableCell>
+                      <TableCell align='justify'>
+                        <IconButton onClick={() => removeItemHandler(item)}>
                           <DeleteOutlined />
-                        </Button>
+                        </IconButton>
                       </TableCell>
                     </TableRow>
                   ))}
@@ -138,13 +142,16 @@ const CartPage = () => {
               <List>
                 <ListItem>
                   <Typography variant='h2'>
-                    SubTotal ({cartItems.reduce((a, c) => a + c.qty, 0)} items) : 
+                    SubTotal ({cartItems.reduce((a, c) => a + c.qty, 0)} items)
+                    :
                   </Typography>
                 </ListItem>
                 <ListItem>
                   <Typography variant='h2'>
-                  ${' '}
-                    {cartItems.reduce((a, c) => a + c.qty * c.price, 0).toFixed(2)}
+                    ${' '}
+                    {cartItems
+                      .reduce((a, c) => a + c.qty * c.price, 0)
+                      .toFixed(2)}
                   </Typography>
                 </ListItem>
                 <ListItem>
@@ -155,7 +162,7 @@ const CartPage = () => {
                     className={classes.button}
                     onClick={checkOutHandler}
                   >
-                    Check Out
+                    PROCEED TO CHECKOUT
                   </Button>
                 </ListItem>
                 <ListItem>
