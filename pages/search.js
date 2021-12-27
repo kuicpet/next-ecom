@@ -6,7 +6,7 @@ import {
   MenuItem,
   Typography,
   Select,
-  Button,
+  IconButton,
 } from '@material-ui/core';
 import { Pagination, Rating } from '@material-ui/lab';
 import React, { useContext } from 'react';
@@ -188,9 +188,9 @@ const Search = (props) => {
               brand !== 'all' ||
               rating !== 'all' ||
               price !== 'all' ? (
-                <Button onClick={() => router.push('/search')}>
+                <IconButton onClick={() => router.push('/search')}>
                   <CancelIcon />
-                </Button>
+                </IconButton>
               ) : null}
             </Grid>
             <Grid item>

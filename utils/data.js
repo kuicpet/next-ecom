@@ -30,8 +30,8 @@ const data = {
       numReviews: 3,
     },
     {
-      name: 'iPhone 11 Pro 256GB Memory',
-      slug: 'iphone-11-pro-256gb-memory',
+      name: 'iPhone 11',
+      slug: 'iphone-11-pro',
       image: '/images/phone.jpg',
       description:
         'Introducing the iPhone 11 Pro. A transformative triple-camera system that adds tons of capability without complexity. An unprecedented leap in battery life',
