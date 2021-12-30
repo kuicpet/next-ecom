@@ -42,7 +42,7 @@ const PlaceOrder = () => {
 
   const round2 = (num) => Math.round(num * 100 + Number.EPSILON) / 100;
   const itemsPrice = round2(cartItems.reduce((a, c) => a + c.price * c.qty, 0));
-  const shippingPrice = round2(itemsPrice > 200 ? 0 : 15);
+  const shippingPrice = round2(itemsPrice > 200 ? 15 : 0);
   const taxPrice = round2(itemsPrice * 0.15);
   const totalPrice = round2(itemsPrice + shippingPrice + taxPrice);
 
