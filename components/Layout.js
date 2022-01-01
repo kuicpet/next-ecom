@@ -91,6 +91,8 @@ const Layout = ({ title, description, children }) => {
     router.push('/')
   }
 
+  const date = new Date().getFullYear()
+  
   return (
     <div>
       <Head>
@@ -199,7 +201,7 @@ const Layout = ({ title, description, children }) => {
         </AppBar>
         <Container className={classes.main}>{children}</Container>
         <footer className={classes.footer}>
-          &copy; 2021 All rights reserved Next-Ecom
+          &copy; {date} All rights reserved Next-Ecom
         </footer>
       </ThemeProvider>
     </div>
