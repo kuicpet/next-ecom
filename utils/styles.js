@@ -21,9 +21,10 @@ const useStyles = makeStyles((theme) => ({
     marginTop: 100,
   },
   footer: {
-    marginTop: 10,
-    marginBottom: 10,
-    textAlign: 'center',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    fontSize: '1rem',
   },
   button: {
     color: '#fff',
@@ -60,10 +61,10 @@ const useStyles = makeStyles((theme) => ({
     padding: '0 1rem',
   },
   marginLeft: {
-    marginLeft: 'auto'
+    marginLeft: 'auto',
   },
   marginRight: {
-    marginRight: 'auto'
+    marginRight: 'auto',
   },
   mt1: {
     marginTop: '1rem',

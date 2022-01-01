@@ -16,7 +16,11 @@ import {
   IconButton,
 } from '@material-ui/core'
 // import SearchIcon from '@material-ui/icons/Search'
-import { AccountCircleOutlined, SearchOutlined, ShoppingCartOutlined } from '@material-ui/icons'
+import {
+  AccountCircleOutlined,
+  SearchOutlined,
+  ShoppingCartOutlined,
+} from '@material-ui/icons'
 import Head from 'next/head'
 import React, { useContext, useState } from 'react'
 import NextLink from 'next/link'
@@ -92,7 +96,7 @@ const Layout = ({ title, description, children }) => {
   }
 
   const date = new Date().getFullYear()
-  
+
   return (
     <div>
       <Head>
@@ -201,7 +205,7 @@ const Layout = ({ title, description, children }) => {
         </AppBar>
         <Container className={classes.main}>{children}</Container>
         <footer className={classes.footer}>
-          &copy; {date} All rights reserved Next-Ecom
+          <p>&copy; {date} All rights reserved Next-Ecom</p>
         </footer>
       </ThemeProvider>
     </div>
