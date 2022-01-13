@@ -73,7 +73,9 @@ const CartPage = () => {
             <div className={classes.section}>
               <NextLink href='/' passHref>
                 <Link>
-                  <ArrowBackIosOutlined />
+                  <IconButton>
+                    <ArrowBackIosOutlined />
+                  </IconButton>
                 </Link>
               </NextLink>
             </div>
@@ -128,7 +130,7 @@ const CartPage = () => {
                       <TableCell align='justify'>${item.price}</TableCell>
                       <TableCell align='justify'>
                         <IconButton onClick={() => removeItemHandler(item)}>
-                          <DeleteOutlined />
+                          <DeleteOutlined style={{ color: 'red' }} />
                         </IconButton>
                       </TableCell>
                     </TableRow>

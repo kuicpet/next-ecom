@@ -5,17 +5,18 @@ import {
   ListItem,
   TextField,
   Typography,
-} from '@material-ui/core';
-import React, { useContext, useEffect } from 'react';
-import Cookies from 'js-cookie';
+  IconButton,
+} from '@material-ui/core'
+import React, { useContext, useEffect } from 'react'
+import Cookies from 'js-cookie'
 import NextLink from 'next/link'
-import Layout from '../components/Layout';
-import useStyles from '../utils/styles';
-import { useRouter } from 'next/router';
-import { Store } from '../utils/Store';
-import { Controller, useForm } from 'react-hook-form';
-import CheckOutSteps from '../components/CheckOutSteps';
-import { ArrowBackIosOutlined } from '@material-ui/icons';
+import Layout from '../components/Layout'
+import useStyles from '../utils/styles'
+import { useRouter } from 'next/router'
+import { Store } from '../utils/Store'
+import { Controller, useForm } from 'react-hook-form'
+import CheckOutSteps from '../components/CheckOutSteps'
+import { ArrowBackIosOutlined } from '@material-ui/icons'
 
 const Shipping = () => {
   const {
@@ -24,26 +25,26 @@ const Shipping = () => {
     formState: { errors },
     setValue,
     getValues,
-  } = useForm();
+  } = useForm()
 
-  const router = useRouter();
-  const classes = useStyles();
-  const { state, dispatch } = useContext(Store);
+  const router = useRouter()
+  const classes = useStyles()
+  const { state, dispatch } = useContext(Store)
   const {
     userInfo,
     cart: { shippingAddress },
-  } = state;
-  const { location } = shippingAddress;
+  } = state
+  const { location } = shippingAddress
   useEffect(() => {
     if (!userInfo) {
-      router.push('/login?redirect=/shipping');
+      router.push('/login?redirect=/shipping')
     }
-    setValue('fullName', shippingAddress.fullName);
-    setValue('address', shippingAddress.address);
-    setValue('city', shippingAddress.city);
-    setValue('postalCode', shippingAddress.postalCode);
-    setValue('country', shippingAddress.country);
-  }, [router, shippingAddress, userInfo, setValue]);
+    setValue('fullName', shippingAddress.fullName)
+    setValue('address', shippingAddress.address)
+    setValue('city', shippingAddress.city)
+    setValue('postalCode', shippingAddress.postalCode)
+    setValue('country', shippingAddress.country)
+  }, [router, shippingAddress, userInfo, setValue])
   // const [name, setName] = useState('');
   // const [email, setEmail] = useState('');
   // const [password, setPassword] = useState('');
@@ -59,7 +60,7 @@ const Shipping = () => {
     dispatch({
       type: 'SAVE_SHIPPING_ADDRESS',
       payload: { fullName, address, city, postalCode, country, location },
-    });
+    })
     Cookies.set(
       'shippingAddress',
       JSON.stringify({
@@ -70,19 +71,19 @@ const Shipping = () => {
         country,
         location,
       })
-    );
-    router.push('/payment');
-  };
+    )
+    router.push('/payment')
+  }
   const chooseLocationHandler = () => {
-    const fullName = getValues('fullName');
-    const address = getValues('address');
-    const city = getValues('city');
-    const postalCode = getValues('postalCode');
-    const country = getValues('country');
+    const fullName = getValues('fullName')
+    const address = getValues('address')
+    const city = getValues('city')
+    const postalCode = getValues('postalCode')
+    const country = getValues('country')
     dispatch({
       type: 'SAVE_SHIPPING_ADDRESS',
       payload: { fullName, address, city, postalCode, country },
-    });
+    })
     Cookies.set(
       'shippingAddress',
       JSON.stringify({
@@ -93,39 +94,41 @@ const Shipping = () => {
         country,
         location,
       })
-    );
-    router.push('/map');
-  };
+    )
+    router.push('/map')
+  }
   return (
-    <Layout title="Shipping Address">
+    <Layout title='Shipping Address'>
       <div className={classes.section}>
-        <NextLink href="/cart" passHref>
+        <NextLink href='/cart' passHref>
           <Link>
-          <ArrowBackIosOutlined />
+            <IconButton>
+              <ArrowBackIosOutlined />
+            </IconButton>
           </Link>
         </NextLink>
       </div>
       <CheckOutSteps activeStep={1} />
       <form className={classes.form} onSubmit={handleSubmit(submitHandler)}>
-        <Typography component="h1" variant="h1">
+        <Typography component='h1' variant='h1'>
           SHIPPING ADDRESS
         </Typography>
         <List>
           <ListItem>
             <Controller
-              name="fullName"
+              name='fullName'
               control={control}
-              defaultValue=""
+              defaultValue=''
               rules={{
                 required: true,
                 minLength: 2,
               }}
               render={({ field }) => (
                 <TextField
-                  id="fullName"
+                  id='fullName'
                   fullWidth
-                  variant="outlined"
-                  label="Full Name"
+                  variant='outlined'
+                  label='Full Name'
                   error={Boolean(errors.fullName)}
                   helperText={
                     errors.fullName
@@ -142,19 +145,19 @@ const Shipping = () => {
 
           <ListItem>
             <Controller
-              name="address"
+              name='address'
               control={control}
-              defaultValue=""
+              defaultValue=''
               rules={{
                 required: true,
                 minLength: 2,
               }}
               render={({ field }) => (
                 <TextField
-                  id="address"
+                  id='address'
                   fullWidth
-                  variant="outlined"
-                  label="Address"
+                  variant='outlined'
+                  label='Address'
                   error={Boolean(errors.address)}
                   helperText={
                     errors.address
@@ -171,19 +174,19 @@ const Shipping = () => {
 
           <ListItem>
             <Controller
-              name="city"
+              name='city'
               control={control}
-              defaultValue=""
+              defaultValue=''
               rules={{
                 required: true,
                 minLength: 2,
               }}
               render={({ field }) => (
                 <TextField
-                  id="city"
+                  id='city'
                   fullWidth
-                  variant="outlined"
-                  label="City"
+                  variant='outlined'
+                  label='City'
                   error={Boolean(errors.city)}
                   helperText={
                     errors.city
@@ -200,19 +203,19 @@ const Shipping = () => {
 
           <ListItem>
             <Controller
-              name="postalCode"
+              name='postalCode'
               control={control}
-              defaultValue=""
+              defaultValue=''
               rules={{
                 required: true,
                 minLength: 2,
               }}
               render={({ field }) => (
                 <TextField
-                  id="postalCode"
+                  id='postalCode'
                   fullWidth
-                  variant="outlined"
-                  label="Postal Code"
+                  variant='outlined'
+                  label='Postal Code'
                   error={Boolean(errors.postalCode)}
                   helperText={
                     errors.postalCode
@@ -229,19 +232,19 @@ const Shipping = () => {
 
           <ListItem>
             <Controller
-              name="country"
+              name='country'
               control={control}
-              defaultValue=""
+              defaultValue=''
               rules={{
                 required: true,
                 minLength: 2,
               }}
               render={({ field }) => (
                 <TextField
-                  id="country"
+                  id='country'
                   fullWidth
-                  variant="outlined"
-                  label="Country"
+                  variant='outlined'
+                  label='Country'
                   error={Boolean(errors.country)}
                   helperText={
                     errors.country
@@ -257,8 +260,8 @@ const Shipping = () => {
           </ListItem>
           <ListItem>
             <Button
-              variant="contained"
-              type="button"
+              variant='contained'
+              type='button'
               onClick={chooseLocationHandler}
             >
               Choose on map
@@ -266,10 +269,10 @@ const Shipping = () => {
           </ListItem>
           <ListItem>
             <Button
-              variant="contained"
-              type="submit"
+              variant='contained'
+              type='submit'
               fullWidth
-              color="primary"
+              color='primary'
               className={classes.button}
             >
               Continue
@@ -278,7 +281,7 @@ const Shipping = () => {
         </List>
       </form>
     </Layout>
-  );
-};
+  )
+}
 
-export default Shipping;
+export default Shipping

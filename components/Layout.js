@@ -17,9 +17,10 @@ import {
 } from '@material-ui/core'
 // import SearchIcon from '@material-ui/icons/Search'
 import {
-  AccountCircleOutlined,
+  PersonOutlineRounded,
   SearchOutlined,
   ShoppingCartOutlined,
+  SpeakerOutlined,
 } from '@material-ui/icons'
 import Head from 'next/head'
 import React, { useContext, useState } from 'react'
@@ -109,7 +110,9 @@ const Layout = ({ title, description, children }) => {
           <Toolbar>
             <NextLink href='/'>
               <Link>
-                <Typography className={classes.brand}>Next-Ecom</Typography>
+                <Typography className={classes.brand}>
+                  <SpeakerOutlined  />
+                </Typography>
               </Link>
             </NextLink>
             <div className={classes.grow}></div>
@@ -157,7 +160,7 @@ const Layout = ({ title, description, children }) => {
                     aria-haspopup='true'
                     onClick={loginClickHandler}
                     className={classes.navbarBtn}
-                    startIcon={<AccountCircleOutlined />}
+                    startIcon={<PersonOutlineRounded />}
                   >
                     {userInfo.name}
                   </Button>

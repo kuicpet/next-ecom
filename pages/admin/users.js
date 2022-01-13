@@ -3,6 +3,7 @@ import {
   Card,
   CircularProgress,
   Grid,
+  IconButton,
   List,
   ListItem,
   ListItemText,
@@ -13,17 +14,18 @@ import {
   TableHead,
   TableRow,
   Typography,
-} from '@material-ui/core';
-import axios from 'axios';
-import dynamic from 'next/dynamic';
-import { useRouter } from 'next/router';
-import React, { useContext, useEffect, useReducer } from 'react';
-import NextLink from 'next/link';
-import Layout from '../../components/Layout';
-import { getError } from '../../utils/error';
-import { Store } from '../../utils/Store';
-import useStyles from '../../utils/styles';
-import { useSnackbar } from 'notistack';
+} from '@material-ui/core'
+import axios from 'axios'
+import dynamic from 'next/dynamic'
+import { useRouter } from 'next/router'
+import React, { useContext, useEffect, useReducer } from 'react'
+import NextLink from 'next/link'
+import Layout from '../../components/Layout'
+import { getError } from '../../utils/error'
+import { Store } from '../../utils/Store'
+import useStyles from '../../utils/styles'
+import { useSnackbar } from 'notistack'
+import { DeleteOutlined } from '@material-ui/icons'
 
 function reducer(state, action) {
   switch (action.type) {
@@ -31,7 +33,7 @@ function reducer(state, action) {
       return {
         ...state,
         loading: true,
-      };
+      }
 
     case 'FETCH_SUCCESS':
       return {
@@ -39,120 +41,120 @@ function reducer(state, action) {
         loading: false,
         users: action.payload,
         error: '',
-      };
+      }
 
     case 'FETCH_FAIL':
       return {
         ...state,
         loading: false,
         error: action.payload,
-      };
+      }
     case 'DELETE_REQUEST':
       return {
         ...state,
         loadingDelete: true,
-      };
+      }
     case 'DELETE_SUCCESS':
       return {
         ...state,
         loadingDelete: false,
         successDelete: true,
-      };
+      }
     case 'DELETE_FAIL':
       return {
         ...state,
         loadingDelete: false,
-      };
+      }
     case 'DELETE_RESET':
       return {
         ...state,
         loadingDelete: false,
         successDelete: false,
-      };
+      }
     default:
-      state;
-      break;
+      state
+      break
   }
 }
 
 const AdminUsers = () => {
-  const router = useRouter();
-  const classes = useStyles();
-  const { state } = useContext(Store);
-  const { userInfo } = state;
+  const router = useRouter()
+  const classes = useStyles()
+  const { state } = useContext(Store)
+  const { userInfo } = state
   const [{ loading, error, users, loadingDelete, successDelete }, dispatch] =
     useReducer(reducer, {
       loading: true,
       error: '',
       users: [],
-    });
-  const { enqueueSnackbar } = useSnackbar();
+    })
+  const { enqueueSnackbar } = useSnackbar()
   useEffect(() => {
     if (!userInfo) {
-      router.push('/login');
+      router.push('/login')
     }
     const fetchUsers = async () => {
       try {
-        dispatch({ type: 'FETCH_REQUEST' });
+        dispatch({ type: 'FETCH_REQUEST' })
         const { data } = await axios.get('/api/admin/users', {
           headers: {
             authorization: `Bearer ${userInfo.token}`,
           },
-        });
-        dispatch({ type: 'FETCH_SUCCESS', payload: data });
-        console.log(data);
+        })
+        dispatch({ type: 'FETCH_SUCCESS', payload: data })
+        console.log(data)
       } catch (error) {
-        dispatch({ type: 'FETCH_ERROR', payload: getError(error) });
+        dispatch({ type: 'FETCH_ERROR', payload: getError(error) })
       }
-    };
-    if (successDelete) {
-      dispatch({ type: 'DELETE_SUCCESS' });
-    } else {
-      fetchUsers();
     }
-  }, [successDelete, router, userInfo]);
+    if (successDelete) {
+      dispatch({ type: 'DELETE_SUCCESS' })
+    } else {
+      fetchUsers()
+    }
+  }, [successDelete, router, userInfo])
   const deleteHandler = async (userId) => {
     if (!window.confirm('Are you sure')) {
-      return;
+      return
     }
     try {
-      dispatch({ type: 'DELETE_REQUEST' });
+      dispatch({ type: 'DELETE_REQUEST' })
       await axios.delete(`/api/admin/users/${userId}`, {
         headers: {
           authorization: `Bearer ${userInfo.token}`,
         },
-      });
-      dispatch({ type: 'DELETE_SUCCESS' });
-      enqueueSnackbar('User deleted successfully', { variant: 'success' });
+      })
+      dispatch({ type: 'DELETE_SUCCESS' })
+      enqueueSnackbar('User deleted successfully', { variant: 'success' })
     } catch (error) {
-      dispatch({ type: 'DELETE_FAIL' });
-      enqueueSnackbar(getError(error), { variant: 'error' });
+      dispatch({ type: 'DELETE_FAIL' })
+      enqueueSnackbar(getError(error), { variant: 'error' })
     }
-  };
+  }
   return (
-    <Layout title="Users">
+    <Layout title='Users'>
       <Grid container spacing={1}>
         <Grid item md={3} xs={12}>
           <Card className={classes.section}>
             <List>
-              <NextLink href="/admin/dashboard" passHref>
-                <ListItem button component="a">
-                  <ListItemText primary="Admin Dashboard"></ListItemText>
+              <NextLink href='/admin/dashboard' passHref>
+                <ListItem button component='a'>
+                  <ListItemText primary='Admin Dashboard'></ListItemText>
                 </ListItem>
               </NextLink>
-              <NextLink href="/admin/orders" passHref>
-                <ListItem button component="a">
-                  <ListItemText primary="Orders"></ListItemText>
+              <NextLink href='/admin/orders' passHref>
+                <ListItem button component='a'>
+                  <ListItemText primary='Orders'></ListItemText>
                 </ListItem>
               </NextLink>
-              <NextLink href="/admin/products" passHref>
-                <ListItem button component="a">
-                  <ListItemText primary="Products"></ListItemText>
+              <NextLink href='/admin/products' passHref>
+                <ListItem button component='a'>
+                  <ListItemText primary='Products'></ListItemText>
                 </ListItem>
               </NextLink>
-              <NextLink href="/admin/users" passHref>
-                <ListItem selected button component="a">
-                  <ListItemText primary="Users"></ListItemText>
+              <NextLink href='/admin/users' passHref>
+                <ListItem selected button component='a'>
+                  <ListItemText primary='Users'></ListItemText>
                 </ListItem>
               </NextLink>
             </List>
@@ -162,9 +164,9 @@ const AdminUsers = () => {
           <Card className={classes.section}>
             <List>
               <ListItem>
-                <Grid container alignItems="center">
+                <Grid container alignItems='center'>
                   <Grid item xs={6}>
-                    <Typography component="h1" variant="h1">
+                    <Typography component='h1' variant='h1'>
                       Users
                     </Typography>
                   </Grid>
@@ -199,17 +201,17 @@ const AdminUsers = () => {
                                 href={`/admin/user/${user._id}`}
                                 passHref
                               >
-                                <Button variant="contained" size="small">
+                                <Button variant='contained' size='small'>
                                   Edit
                                 </Button>
                               </NextLink>{' '}
-                              <Button
-                                variant="contained"
-                                size="small"
+                              <IconButton
+                                variant='contained'
+                                size='small'
                                 onClick={() => deleteHandler(user._id)}
                               >
-                                Delete
-                              </Button>
+                                <DeleteOutlined style={{ color: 'red' }} />
+                              </IconButton>
                               {loadingDelete && <CircularProgress />}
                             </TableCell>
                           </TableRow>
@@ -224,7 +226,7 @@ const AdminUsers = () => {
         </Grid>
       </Grid>
     </Layout>
-  );
-};
+  )
+}
 
-export default dynamic(() => Promise.resolve(AdminUsers), { ssr: false });
+export default dynamic(() => Promise.resolve(AdminUsers), { ssr: false })

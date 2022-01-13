@@ -14,6 +14,7 @@ import {
   ListItem,
   Card,
   CircularProgress,
+  IconButton,
 } from '@material-ui/core'
 import React, { useContext, useEffect, useReducer } from 'react'
 import dynamic from 'next/dynamic'
@@ -27,6 +28,7 @@ import { useSnackbar } from 'notistack'
 import { getError } from '../../utils/error'
 import { PayPalButtons, usePayPalScriptReducer } from '@paypal/react-paypal-js'
 import Skeleton  from 'react-loading-skeleton'
+import { DescriptionOutlined, LocationOnOutlined, PaymentOutlined } from '@material-ui/icons'
 
 function reducer(state, action) {
   switch (action.type) {
@@ -259,9 +261,12 @@ const Order = ({ params }) => {
           <Grid item md={9} xs={12}>
             <Card className={classes.section}>
               <List>
-                <ListItem>
+                <ListItem alignItems='center'>
                   <Typography component='h2' variant='h2'>
                     SHIPPING ADDRESS
+                    <IconButton>
+                      <LocationOnOutlined style={{color: 'green'}} />
+                    </IconButton>
                   </Typography>
                 </ListItem>
                 <ListItem>
@@ -296,6 +301,9 @@ const Order = ({ params }) => {
                 <ListItem>
                   <Typography component='h2' variant='h2'>
                     PAYMENT METHOD
+                    <IconButton>
+                      <PaymentOutlined  style={{color: 'orangered'}}/>
+                    </IconButton>
                   </Typography>
                 </ListItem>
                 <ListItem>
@@ -315,6 +323,9 @@ const Order = ({ params }) => {
                 <ListItem>
                   <Typography component='h2' variant='h2'>
                     ORDER ITEMS
+                    <IconButton>
+                      <DescriptionOutlined style={{color: 'royalblue'}} />
+                    </IconButton>
                   </Typography>
                 </ListItem>
                 <ListItem>

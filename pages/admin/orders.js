@@ -142,7 +142,7 @@ const AdminOrders = () => {
                       <TableBody>
                         {orders.map((order) => (
                           <TableRow key={order._id}>
-                            <TableCell>{order._id}</TableCell>
+                            <TableCell>{(order._id).slice(0, 5)}...{(order._id).slice(order._id.length -4)}</TableCell>
                             <TableCell>{order.user? order.user.name : 'Deleted user'}</TableCell>
                             <TableCell>{order.createdAt}</TableCell>
                             <TableCell>${order.totalPrice}</TableCell>
@@ -162,7 +162,7 @@ const AdminOrders = () => {
                               </NextLink>
                             </TableCell>
                           </TableRow>
-                        ))}
+                        )).reverse()}
                       </TableBody>
                     </Table>
                   </TableContainer>

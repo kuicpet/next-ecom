@@ -1,6 +1,7 @@
 import {
   Button,
   Card,
+  CardHeader,
   CardActions,
   CardContent,
   CircularProgress,
@@ -9,87 +10,89 @@ import {
   ListItem,
   ListItemText,
   Typography,
-} from '@material-ui/core';
-import dynamic from 'next/dynamic';
-import React, { useContext, useEffect, useReducer } from 'react';
-import NextLink from 'next/link';
-import { Bar } from 'react-chartjs-2';
-import Layout from '../../components/Layout';
-import { Store } from '../../utils/Store';
-import { useRouter } from 'next/router';
-import useStyles from '../../utils/styles';
-import { getError } from '../../utils/error';
-import axios from 'axios';
+  IconButton,
+} from '@material-ui/core'
+import dynamic from 'next/dynamic'
+import React, { useContext, useEffect, useReducer } from 'react'
+import NextLink from 'next/link'
+import { Bar } from 'react-chartjs-2'
+import Layout from '../../components/Layout'
+import { Store } from '../../utils/Store'
+import { useRouter } from 'next/router'
+import useStyles from '../../utils/styles'
+import { getError } from '../../utils/error'
+import axios from 'axios'
+import { DescriptionOutlined, InboxOutlined, PersonOutlineRounded } from '@material-ui/icons'
 
 const reducer = (state, action) => {
   switch (action.type) {
     case 'FETCH_REQUEST':
-      return { ...state, loading: true, error: '' };
+      return { ...state, loading: true, error: '' }
     case 'FETCH_SUCCESS':
-      return { ...state, loading: false, summary: action.payload, error: '' };
+      return { ...state, loading: false, summary: action.payload, error: '' }
     case 'FETCH_FAIL':
-      return { ...state, loading: false, error: action.payload };
+      return { ...state, loading: false, error: action.payload }
 
     default:
-      state;
+      state
   }
-};
+}
 
 const AdminDashboard = () => {
-  const { state } = useContext(Store);
-  const router = useRouter();
-  const classes = useStyles();
-  const { userInfo } = state;
+  const { state } = useContext(Store)
+  const router = useRouter()
+  const classes = useStyles()
+  const { userInfo } = state
 
   const [{ loading, error, summary }, dispatch] = useReducer(reducer, {
     loading: true,
     error: '',
     summary: { salesData: [] },
-  });
+  })
   useEffect(() => {
     if (!userInfo) {
-      router.push('/login');
+      router.push('/login')
     }
     const fetchData = async () => {
       try {
-        dispatch({ type: 'FETCH_REQUEST' });
+        dispatch({ type: 'FETCH_REQUEST' })
         const { data } = await axios.get('/api/admin/summary', {
           headers: {
             authorization: `Bearer ${userInfo.token}`,
           },
-        });
-        dispatch({ type: 'FETCH_SUCCESS', payload: data });
+        })
+        dispatch({ type: 'FETCH_SUCCESS', payload: data })
       } catch (error) {
-        dispatch({ type: 'FETCH_FAIL', payload: getError(error) });
+        dispatch({ type: 'FETCH_FAIL', payload: getError(error) })
       }
-    };
-    fetchData();
-  }, [router, userInfo]);
+    }
+    fetchData()
+  }, [router, userInfo])
 
   return (
-    <Layout title="Admin Dashboard">
+    <Layout title='Admin Dashboard'>
       <Grid container spacing={1}>
         <Grid item md={3} xs={12}>
           <Card className={classes.section}>
             <List>
-              <NextLink href="/admin/dashboard" passHref>
-                <ListItem selected button component="a">
-                  <ListItemText primary="Admin Dashboard"></ListItemText>
+              <NextLink href='/admin/dashboard' passHref>
+                <ListItem selected button component='a'>
+                  <ListItemText primary='Admin Dashboard'></ListItemText>
                 </ListItem>
               </NextLink>
-              <NextLink href="/admin/orders" passHref>
-                <ListItem button component="a">
-                  <ListItemText primary="Orders"></ListItemText>
+              <NextLink href='/admin/orders' passHref>
+                <ListItem button component='a'>
+                  <ListItemText primary='Orders'></ListItemText>
                 </ListItem>
               </NextLink>
-              <NextLink href="/admin/products" passHref>
-                <ListItem button component="a">
-                  <ListItemText primary="Products"></ListItemText>
+              <NextLink href='/admin/products' passHref>
+                <ListItem button component='a'>
+                  <ListItemText primary='Products'></ListItemText>
                 </ListItem>
               </NextLink>
-              <NextLink href="/admin/users" passHref>
-                <ListItem button component="a">
-                  <ListItemText primary="Users"></ListItemText>
+              <NextLink href='/admin/users' passHref>
+                <ListItem button component='a'>
+                  <ListItemText primary='Users'></ListItemText>
                 </ListItem>
               </NextLink>
             </List>
@@ -107,15 +110,22 @@ const AdminDashboard = () => {
                   <Grid container spacing={5}>
                     <Grid item md={4} xs={12}>
                       <Card raised>
+                        <CardHeader
+                          title='Orders'
+                          action={
+                            <IconButton>
+                              <DescriptionOutlined style={{color: 'royalblue'}} />
+                            </IconButton>
+                          }
+                        />
                         <CardContent>
-                          <Typography variant="h1">
+                          <Typography variant='h1'>
                             {summary.ordersCount}
                           </Typography>
-                          <Typography>Orders</Typography>
                         </CardContent>
                         <CardActions>
-                          <NextLink href="/admin/orders" passHref>
-                            <Button color="primary" size="small">
+                          <NextLink href='/admin/orders' passHref>
+                            <Button color='primary' size='small'>
                               View Orders
                             </Button>
                           </NextLink>
@@ -124,15 +134,22 @@ const AdminDashboard = () => {
                     </Grid>
                     <Grid item md={4} xs={12}>
                       <Card raised>
+                        <CardHeader
+                          title='Products'
+                          action={
+                            <IconButton>
+                              <InboxOutlined style={{color: 'orangered'}} />
+                            </IconButton>
+                          }
+                        />
                         <CardContent>
-                          <Typography variant="h1">
+                          <Typography variant='h1'>
                             {summary.productsCount}
                           </Typography>
-                          <Typography>Products</Typography>
                         </CardContent>
                         <CardActions>
-                          <NextLink href="/admin/products" passHref>
-                            <Button color="primary" size="small">
+                          <NextLink href='/admin/products' passHref>
+                            <Button color='primary' size='small'>
                               View Products
                             </Button>
                           </NextLink>
@@ -141,15 +158,22 @@ const AdminDashboard = () => {
                     </Grid>
                     <Grid item md={4} xs={12}>
                       <Card raised>
+                        <CardHeader
+                          title='Users'
+                          action={
+                            <IconButton>
+                              <PersonOutlineRounded style={{color: 'teal'}} />
+                            </IconButton>
+                          }
+                        />
                         <CardContent>
-                          <Typography variant="h1">
+                          <Typography variant='h1'>
                             {summary.usersCount}
                           </Typography>
-                          <Typography>Users</Typography>
                         </CardContent>
                         <CardActions>
-                          <NextLink href="/admin/users" passHref>
-                            <Button color="primary" size="small">
+                          <NextLink href='/admin/users' passHref>
+                            <Button color='primary' size='small'>
                               View Users
                             </Button>
                           </NextLink>
@@ -160,7 +184,7 @@ const AdminDashboard = () => {
                 )}
               </ListItem>
               <ListItem>
-                <Typography component="h1" variant="h1">
+                <Typography component='h1' variant='h1'>
                   Sales Chart
                 </Typography>
               </ListItem>
@@ -186,7 +210,7 @@ const AdminDashboard = () => {
         </Grid>
       </Grid>
     </Layout>
-  );
-};
+  )
+}
 
-export default dynamic(() => Promise.resolve(AdminDashboard), { ssr: false });
+export default dynamic(() => Promise.resolve(AdminDashboard), { ssr: false })

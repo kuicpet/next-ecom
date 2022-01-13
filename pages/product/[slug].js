@@ -164,6 +164,7 @@ const ProductPage = (props) => {
                   color="primary"
                   className={classes.button}
                   onClick={() => addToCartHandler(product)}
+                  disabled={product.countInStock === 0}
                 >
                   Add to Cart
                 </Button>
