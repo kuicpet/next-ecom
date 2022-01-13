@@ -80,7 +80,7 @@ const AdminDashboard = () => {
                 <ListItem selected button component='a'>
                   <ListItemText primary='Admin Dashboard'></ListItemText>
                   <ListItemIcon>
-                    <PersonOutlineRounded />
+                    <PersonOutlineRounded style={{color: 'teal'}} />
                   </ListItemIcon>
                 </ListItem>
               </NextLink>

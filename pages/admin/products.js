@@ -27,7 +27,7 @@ import { getError } from '../../utils/error'
 import { Store } from '../../utils/Store'
 import useStyles from '../../utils/styles'
 import { useSnackbar } from 'notistack'
-import { DeleteOutlined, DescriptionOutlined, GroupAddOutlined, InboxOutlined, PersonOutlineRounded } from '@material-ui/icons'
+import { AddOutlined, DeleteOutlined, DescriptionOutlined, EditOutlined, GroupAddOutlined, InboxOutlined, PersonOutlineRounded } from '@material-ui/icons'
 
 function reducer(state, action) {
   switch (action.type) {
@@ -207,7 +207,7 @@ const AdminProducts = () => {
                 <ListItem selected button component='a'>
                   <ListItemText primary='Products'></ListItemText>
                   <ListItemIcon>
-                    <InboxOutlined />
+                    <InboxOutlined style={{color: 'orangered'}} />
                   </ListItemIcon>
                 </ListItem>
               </NextLink>
@@ -240,7 +240,7 @@ const AdminProducts = () => {
                       className={classes.button}
                       onClick={createProductHandler}
                     >
-                      Create
+                      <AddOutlined /> Add New Product
                     </Button>
                     {loadingCreate && <CircularProgress />}
                   </Grid>
@@ -285,9 +285,9 @@ const AdminProducts = () => {
                                 passHref
                               >
                                 <Link>
-                                  <Button variant='contained' size='small'>
-                                    Edit
-                                  </Button>
+                                  <IconButton>
+                                    <EditOutlined style={{color: 'green'}}/>
+                                  </IconButton>
                                 </Link>
                               </NextLink>{' '}
                               <IconButton

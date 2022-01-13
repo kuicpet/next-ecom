@@ -1,8 +1,8 @@
 import {
-  Button,
   Card,
   CircularProgress,
   Grid,
+  IconButton,
   List,
   ListItem,
   ListItemIcon,
@@ -24,7 +24,7 @@ import Layout from '../../components/Layout';
 import { getError } from '../../utils/error';
 import { Store } from '../../utils/Store';
 import useStyles from '../../utils/styles';
-import { DescriptionOutlined, GroupAddOutlined, InboxOutlined, PersonOutlineRounded } from '@material-ui/icons';
+import { DescriptionOutlined, GroupAddOutlined, InboxOutlined, PersonOutlineRounded, VisibilityOutlined } from '@material-ui/icons';
 
 function reducer(state, action) {
   switch (action.type) {
@@ -103,7 +103,7 @@ const AdminOrders = () => {
                 <ListItem selected button component="a">
                   <ListItemText primary="Orders"></ListItemText>
                   <ListItemIcon>
-                    <DescriptionOutlined />
+                    <DescriptionOutlined style={{color: 'blue'}} />
                   </ListItemIcon>
                 </ListItem>
               </NextLink>
@@ -172,7 +172,9 @@ const AdminOrders = () => {
                             </TableCell>
                             <TableCell>
                               <NextLink href={`/order/${order._id}`} passHref>
-                                <Button variant="contained">Details</Button>
+                              <IconButton>
+                                    <VisibilityOutlined style={{color: 'blue'}}/>
+                                  </IconButton>
                               </NextLink>
                             </TableCell>
                           </TableRow>

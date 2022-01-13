@@ -1,5 +1,4 @@
 import {
-  Button,
   Card,
   CircularProgress,
   Grid,
@@ -26,7 +25,7 @@ import { getError } from '../../utils/error'
 import { Store } from '../../utils/Store'
 import useStyles from '../../utils/styles'
 import { useSnackbar } from 'notistack'
-import { DeleteOutlined, DescriptionOutlined, GroupAddOutlined, InboxOutlined, PersonOutlineRounded } from '@material-ui/icons'
+import { DeleteOutlined, DescriptionOutlined, EditOutlined, GroupAddOutlined, InboxOutlined, PersonOutlineRounded } from '@material-ui/icons'
 
 function reducer(state, action) {
   switch (action.type) {
@@ -166,7 +165,7 @@ const AdminUsers = () => {
                 <ListItem selected button component='a'>
                   <ListItemText primary='Users'></ListItemText>
                   <ListItemIcon>
-                    <GroupAddOutlined />
+                    <GroupAddOutlined style={{color: 'teal'}} />
                   </ListItemIcon>
                 </ListItem>
               </NextLink>
@@ -214,9 +213,9 @@ const AdminUsers = () => {
                                 href={`/admin/user/${user._id}`}
                                 passHref
                               >
-                                <Button variant='contained' size='small'>
-                                  Edit
-                                </Button>
+                                <IconButton>
+                                    <EditOutlined style={{color: 'green'}}/>
+                                  </IconButton>
                               </NextLink>{' '}
                               <IconButton
                                 variant='contained'
