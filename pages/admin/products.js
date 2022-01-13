@@ -7,6 +7,7 @@ import {
   Link,
   List,
   ListItem,
+  ListItemIcon,
   ListItemText,
   Table,
   TableBody,
@@ -26,7 +27,7 @@ import { getError } from '../../utils/error'
 import { Store } from '../../utils/Store'
 import useStyles from '../../utils/styles'
 import { useSnackbar } from 'notistack'
-import { DeleteOutlined } from '@material-ui/icons'
+import { DeleteOutlined, DescriptionOutlined, GroupAddOutlined, InboxOutlined, PersonOutlineRounded } from '@material-ui/icons'
 
 function reducer(state, action) {
   switch (action.type) {
@@ -189,21 +190,33 @@ const AdminProducts = () => {
               <NextLink href='/admin/dashboard' passHref>
                 <ListItem button component='a'>
                   <ListItemText primary='Admin Dashboard'></ListItemText>
+                  <ListItemIcon>
+                    <PersonOutlineRounded />
+                  </ListItemIcon>
                 </ListItem>
               </NextLink>
               <NextLink href='/admin/orders' passHref>
                 <ListItem button component='a'>
                   <ListItemText primary='Orders'></ListItemText>
+                  <ListItemIcon>
+                    <DescriptionOutlined />
+                  </ListItemIcon>
                 </ListItem>
               </NextLink>
               <NextLink href='/admin/products' passHref>
                 <ListItem selected button component='a'>
                   <ListItemText primary='Products'></ListItemText>
+                  <ListItemIcon>
+                    <InboxOutlined />
+                  </ListItemIcon>
                 </ListItem>
               </NextLink>
               <NextLink href='/admin/users' passHref>
                 <ListItem button component='a'>
                   <ListItemText primary='Users'></ListItemText>
+                  <ListItemIcon>
+                    <GroupAddOutlined />
+                  </ListItemIcon>
                 </ListItem>
               </NextLink>
             </List>

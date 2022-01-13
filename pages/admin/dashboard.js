@@ -11,6 +11,7 @@ import {
   ListItemText,
   Typography,
   IconButton,
+  ListItemIcon,
 } from '@material-ui/core'
 import dynamic from 'next/dynamic'
 import React, { useContext, useEffect, useReducer } from 'react'
@@ -22,7 +23,7 @@ import { useRouter } from 'next/router'
 import useStyles from '../../utils/styles'
 import { getError } from '../../utils/error'
 import axios from 'axios'
-import { DescriptionOutlined, InboxOutlined, PersonOutlineRounded } from '@material-ui/icons'
+import { DescriptionOutlined, GroupAddOutlined, InboxOutlined, PersonOutlineRounded } from '@material-ui/icons'
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -78,21 +79,33 @@ const AdminDashboard = () => {
               <NextLink href='/admin/dashboard' passHref>
                 <ListItem selected button component='a'>
                   <ListItemText primary='Admin Dashboard'></ListItemText>
+                  <ListItemIcon>
+                    <PersonOutlineRounded />
+                  </ListItemIcon>
                 </ListItem>
               </NextLink>
               <NextLink href='/admin/orders' passHref>
                 <ListItem button component='a'>
                   <ListItemText primary='Orders'></ListItemText>
+                  <ListItemIcon>
+                    <DescriptionOutlined />
+                  </ListItemIcon>
                 </ListItem>
               </NextLink>
               <NextLink href='/admin/products' passHref>
                 <ListItem button component='a'>
                   <ListItemText primary='Products'></ListItemText>
+                  <ListItemIcon>
+                    <InboxOutlined />
+                  </ListItemIcon>
                 </ListItem>
               </NextLink>
               <NextLink href='/admin/users' passHref>
                 <ListItem button component='a'>
                   <ListItemText primary='Users'></ListItemText>
+                  <ListItemIcon>
+                    <GroupAddOutlined />
+                  </ListItemIcon>
                 </ListItem>
               </NextLink>
             </List>
@@ -162,7 +175,7 @@ const AdminDashboard = () => {
                           title='Users'
                           action={
                             <IconButton>
-                              <PersonOutlineRounded style={{color: 'teal'}} />
+                              <GroupAddOutlined style={{color: 'teal'}} />
                             </IconButton>
                           }
                         />

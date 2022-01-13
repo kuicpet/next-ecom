@@ -28,7 +28,7 @@ import { useSnackbar } from 'notistack'
 import { getError } from '../../utils/error'
 import { PayPalButtons, usePayPalScriptReducer } from '@paypal/react-paypal-js'
 import Skeleton  from 'react-loading-skeleton'
-import { DescriptionOutlined, LocationOnOutlined, PaymentOutlined } from '@material-ui/icons'
+import { DescriptionOutlined, LocalShippingOutlined, LocationOnOutlined, PaymentOutlined } from '@material-ui/icons'
 
 function reducer(state, action) {
   switch (action.type) {
@@ -443,14 +443,14 @@ const Order = ({ params }) => {
                 )}
                 {userInfo.isAdmin && !order.isPaid && !order.isDelivered && (
                   <ListItem>
-                    {loadingDeliver && <CircularProgress />}
+                    {loadingDeliver && <CircularProgress />}{' '}
                     <Button
                       variant='contained'
                       color='primary'
                       className={classes.button}
                       onClick={deliverOrderHandler}
                     >
-                      Deliver Order
+                      Deliver Order <LocalShippingOutlined />
                     </Button>
                   </ListItem>
                 )}
