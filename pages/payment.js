@@ -88,6 +88,11 @@ export default function Payment() {
                   value='Cash'
                   control={<Radio />}
                 ></FormControlLabel>
+                <FormControlLabel
+                  label='Crypto'
+                  value='Crypto'
+                  control={<Radio />}
+                ></FormControlLabel>
               </RadioGroup>
             </FormControl>
           </ListItem>

@@ -27,8 +27,13 @@ import { useRouter } from 'next/router'
 import { useSnackbar } from 'notistack'
 import { getError } from '../../utils/error'
 import { PayPalButtons, usePayPalScriptReducer } from '@paypal/react-paypal-js'
-import Skeleton  from 'react-loading-skeleton'
-import { DescriptionOutlined, LocalShippingOutlined, LocationOnOutlined, PaymentOutlined } from '@material-ui/icons'
+import Skeleton from 'react-loading-skeleton'
+import {
+  DescriptionOutlined,
+  LocalShippingOutlined,
+  LocationOnOutlined,
+  PaymentOutlined,
+} from '@material-ui/icons'
 
 function reducer(state, action) {
   switch (action.type) {
@@ -265,7 +270,7 @@ const Order = ({ params }) => {
                   <Typography component='h2' variant='h2'>
                     SHIPPING ADDRESS
                     <IconButton>
-                      <LocationOnOutlined style={{color: 'green'}} />
+                      <LocationOnOutlined style={{ color: 'green' }} />
                     </IconButton>
                   </Typography>
                 </ListItem>
@@ -302,7 +307,7 @@ const Order = ({ params }) => {
                   <Typography component='h2' variant='h2'>
                     PAYMENT METHOD
                     <IconButton>
-                      <PaymentOutlined  style={{color: 'orangered'}}/>
+                      <PaymentOutlined style={{ color: 'orangered' }} />
                     </IconButton>
                   </Typography>
                 </ListItem>
@@ -324,7 +329,7 @@ const Order = ({ params }) => {
                   <Typography component='h2' variant='h2'>
                     ORDER ITEMS
                     <IconButton>
-                      <DescriptionOutlined style={{color: 'royalblue'}} />
+                      <DescriptionOutlined style={{ color: 'royalblue' }} />
                     </IconButton>
                   </Typography>
                 </ListItem>
@@ -426,7 +431,7 @@ const Order = ({ params }) => {
                     </Grid>
                   </Grid>
                 </ListItem>
-                {!isPaid && (
+                {!isPaid && paymentMethod === 'PayPal' && (
                   <ListItem>
                     {isPending ? (
                       <CircularProgress />
@@ -437,6 +442,40 @@ const Order = ({ params }) => {
                           onApprove={onApprove}
                           onError={onError}
                         />
+                      </div>
+                    )}
+                  </ListItem>
+                )}
+                {!isPaid && paymentMethod === 'Crypto' && (
+                  <ListItem>
+                    {isPending ? (
+                      <CircularProgress />
+                    ) : (
+                      <div className={classes.fullWidth}>
+                        <Button
+                          variant='contained'
+                          color='primary'
+                          className={classes.button}
+                        >
+                          Connect Wallet
+                        </Button>
+                      </div>
+                    )}
+                  </ListItem>
+                )}
+                {!isPaid && paymentMethod === 'Stripe' && (
+                  <ListItem>
+                    {isPending ? (
+                      <CircularProgress />
+                    ) : (
+                      <div className={classes.fullWidth}>
+                        <Button
+                          variant='contained'
+                          color='primary'
+                          className={classes.button}
+                        >
+                          Pay with Stripe
+                        </Button>
                       </div>
                     )}
                   </ListItem>
