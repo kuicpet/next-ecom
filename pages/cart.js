@@ -158,6 +158,7 @@ const CartPage = () => {
                 </ListItem>
                 <ListItem>
                   <Button
+                    loading
                     variant='contained'
                     color='primary'
                     fullWidth
