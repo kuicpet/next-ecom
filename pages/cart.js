@@ -58,7 +58,7 @@ const CartPage = () => {
   return (
     <Layout title='Shopping cart'>
       <Typography component='h1' variant='h1' align='center'>
-        Shopping Cart ({cartItems.reduce((a, c) => a + c.qty, 0)})
+        Your Shopping Cart ({cartItems.reduce((a, c) => a + c.qty, 0)})
       </Typography>
       {cartItems.length === 0 ? (
         <Typography align='center'>
