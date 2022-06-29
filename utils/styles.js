@@ -26,6 +26,11 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'center',
     fontSize: '0.85rem',
   },
+  cardFooter: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between'
+  },
   button: {
     color: '#fff',
     borderRadius: 0,

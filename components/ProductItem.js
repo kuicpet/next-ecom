@@ -30,7 +30,7 @@ const ProductItem = ({ product, addToCartHandler }) => {
         </CardActionArea>
       </NextLink>
 
-      <CardActions>
+      <CardActions className={classes.cardFooter}>
         <Typography className={classes.marginRight}>${product.price}</Typography>
         <Button
           size='small'
